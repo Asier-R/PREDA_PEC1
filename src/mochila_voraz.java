@@ -1,13 +1,15 @@
+import java.io.File;
+
 public class mochila_voraz {
 
-    static boolean existeFicheroEntrada = false;
+    static boolean existeFicheroEntrada = false; //Se modifica en validarFichero
     static boolean trazasActivas = false;
     static boolean FINDEPROGAMA = false;
 
     public static void main(String[] args) {
         System.out.println("\nSYSTEM: INICIO DE PROGRAMA MOCHILA_VORAZ\n\n");
 
-        if(args.length > 3) {
+        if(args.length > 4) {
             System.out.println("SYSTEM: Ha introducido "+(args.length-4)+" argumentos más de los permitidos.");
             mostrarAyuda();
             FINDEPROGAMA = true;
@@ -17,7 +19,8 @@ public class mochila_voraz {
             System.out.println("SYSTEM: No se ha especificado fichero de entrada...se solicitarán los datos por entrada de teclado.");
             System.out.println("SYSTEM: No se ha especificado fichero de salida...se creará un fichero con nombre salida_mochila_voraz.txt.");
 
-        }else{
+        }
+        else{
             comprobarArgumentos(args);
         }
 
@@ -37,23 +40,37 @@ public class mochila_voraz {
 
     static void comprobarArgumentos(String[] args){
         //Se utilizan 4 argumentos
-        if(args.length == 3){
+        if(args.length == 4){
             //Primer argumento
-            switch (args[0]){
-                case "-t":
-                    System.out.println("SYSTEM: se han activado las trazas.");
-                    trazasActivas = true;
-                    break;
-                case "-h":
-                    mostrarAyuda();
-                    break;
-                default:
-                    System.out.println("ERROR: argumento no válido.");
-                    mostrarAyuda();
-                    FINDEPROGAMA = true;
-                    return;
+            if(!esValidoArgumento(args[0])){
+                FINDEPROGAMA = true;
+                return;
             }
             //Segundo argumento
+            if(!esValidoArgumento(args[1])){
+                FINDEPROGAMA = true;
+                return;
+            }
+            //Tercer argumento
+            if(!esValidoArgumentoFichero(args[2], true)){
+                FINDEPROGAMA = true;
+                return;
+            }
+            //Cuarto argumento
+            if(!esValidoArgumentoFichero(args[3], false)){
+                FINDEPROGAMA = true;
+                return;
+            }
+        }
+        //Se utilizan 3 argumentos
+        else if(args.length == 3){
+            //Primer argumento
+            if(!esValidoArgumento(args[0])){
+                FINDEPROGAMA = true;
+                return;
+            }
+            //Segundo argumento
+            boolean esEntrada = false;
             switch (args[1]){
                 case "-t":
                     System.out.println("SYSTEM: se han activado las trazas.");
@@ -63,49 +80,104 @@ public class mochila_voraz {
                     mostrarAyuda();
                     break;
                 default:
-                    System.out.println("ERROR: argumento no válido.");
-                    mostrarAyuda();
-                    FINDEPROGAMA = true;
-                    return;
+                    System.out.println("SYSTEM: se comprueba validez del fichero '"+args[1]+"'.");
+                    if(!validarFichero(args[1], true)){
+                        FINDEPROGAMA = true;
+                        return;
+                    }
+                    esEntrada = true; //Para indicar si el tercer argumento es fichero de salida
+                    break;
             }
             //Tercer argumento
-            if(args[2].equals("-t") || args[2].equals("-h")){
-                System.out.println("ERROR: tercer argumento no válido.");
-                mostrarAyuda();
+            if(!esValidoArgumentoFichero(args[2], !esEntrada)){
                 FINDEPROGAMA = true;
                 return;
-            }else{
-                System.out.println("SYSTEM: se comprueba validez del fichero de entrada '"+args[3]+"'.");
-                if(!validarFichero(args[2], true)) {
-                    FINDEPROGAMA = true;
-                    return;
-                }
             }
-            //Cuarto argumento
-            if(args[3].equals("-t") || args[3].equals("-h")){
-                System.out.println("ERROR: cuarto argumento no válido.");
-                mostrarAyuda();
+        }
+        //Se utilizan 2 argumentos
+        else if(args.length == 2){
+            //Primer argumento
+            boolean esEntrada = false;
+            switch (args[0]){
+                case "-t":
+                    System.out.println("SYSTEM: se han activado las trazas.");
+                    trazasActivas = true;
+                    break;
+                case "-h":
+                    mostrarAyuda();
+                    break;
+                default:
+                    System.out.println("SYSTEM: se comprueba validez del fichero '"+args[0]+"'.");
+                    if(!validarFichero(args[0], true)){
+                        FINDEPROGAMA = true;
+                        return;
+                    }
+                    esEntrada = true; //Para indicar si el segundo argumento es fichero de salida
+                    break;
+            }
+            //Segundo argumento
+            if(!esValidoArgumentoFichero(args[2], !esEntrada)){
                 FINDEPROGAMA = true;
                 return;
-            }else{
-                System.out.println("SYSTEM: se comprueba validez del fichero de salida '"+args[3]+"'.");
-                if(!validarFichero(args[3], false)) {
-                    FINDEPROGAMA = true;
-                    return;
-                }
             }
-
-
-
-        }else if(args.length == 2){
-
+        }
+        //Se utilizan 2 argumentos
+        else if(args.length == 1){
+            switch (args[0]){
+                case "-t":
+                    System.out.println("SYSTEM: se han activado las trazas.");
+                    trazasActivas = true;
+                    break;
+                case "-h":
+                    mostrarAyuda();
+                    break;
+                default:
+                    System.out.println("SYSTEM: se comprueba validez del fichero '"+args[0]+"'.");
+                    if(!validarFichero(args[0], true)){
+                        FINDEPROGAMA = true;
+                        return;
+                    }
+                    break;
+            }
         }
 
     }
 
-    static boolean validarFichero(String nombre_fichero, Boolean esEntrada){
-        //incluir codigo de validacion de fichero
+    static boolean esValidoArgumento(String arg){
+        switch (arg){
+            case "-t":
+                System.out.println("SYSTEM: se han activado las trazas.");
+                trazasActivas = true;
+                return true;
+            case "-h":
+                mostrarAyuda();
+                return true;
+            default:
+                System.out.println("ERROR: argumento no válido.");
+                mostrarAyuda();
+                return false;
+        }
+    }
+
+    static boolean esValidoArgumentoFichero(String arg, Boolean esEntrada){
+        if(arg.equals("-t") || arg.equals("-h")){
+            System.out.println("ERROR: argumento "+arg+" no válido.");
+            mostrarAyuda();
+            return false;
+        }else{
+            System.out.println("SYSTEM: se comprueba validez del fichero '"+arg+"'.");
+            if(!validarFichero(arg, esEntrada)) {
+                return false;
+            }
+        }
         return true;
+    }
+
+    static boolean validarFichero(String nombre_fichero, Boolean esEntrada){
+        File fichero = new File(nombre_fichero);
+        return fichero.isFile();
+
+
     }
 
 }
