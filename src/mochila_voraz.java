@@ -1,5 +1,11 @@
 import java.io.File;
 
+/**
+ * PEC1
+ * AUTOR: Asier Rodríguez
+ * CURSO: UNED PREDA 2022/2023
+ * JDK: Oracle OpenJDK version 19
+ */
 public class mochila_voraz {
 
     static boolean existeFicheroEntrada = false; //Se modifica en validarFichero
@@ -176,8 +182,6 @@ public class mochila_voraz {
     static boolean validarFichero(String nombre_fichero, Boolean esEntrada){
         File fichero = new File(nombre_fichero);
         return fichero.isFile();
-
-
     }
 
 }
