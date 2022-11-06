@@ -1,1 +1,5 @@
-fichero de pruebas
+3
+18 25
+15 24
+10 15
+20
