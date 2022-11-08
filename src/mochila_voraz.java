@@ -150,13 +150,12 @@ public class mochila_voraz {
             FINDEPROGAMA = true;
             return false;
         }else{
-            System.out.println("SYSTEM: se comprueba validez del fichero '"+arg+"'.");
             return validarFichero(arg, esEntrada);
         }
     }
 
     static boolean validarFichero(String nombre_fichero, Boolean esEntrada){
-        System.out.println("SYSTEM: inicio de validación de fichero "+nombre_fichero+".");
+        System.out.println("SYSTEM: inicio de validación de fichero "+(esEntrada?"de entrada":"de salida")+" "+nombre_fichero+".");
         File fichero = new File(nombre_fichero);
         //¿Existe fichero?
         if(!fichero.exists()) {
@@ -171,14 +170,21 @@ public class mochila_voraz {
             return false;
         }
         //¿Se puede leer?
-        if(!fichero.canRead()) {
+        if(esEntrada && !fichero.canRead()) {
             System.out.println("ERROR: el fichero no se puede leer.");
+            FINDEPROGAMA = true;
+            return false;
+        }
+        //¿Se puede escribir?
+        if(!esEntrada && !fichero.canWrite()) {
+            System.out.println("ERROR: no se puede escribir en el fichero.");
             FINDEPROGAMA = true;
             return false;
         }
         if(esEntrada) existeFicheroEntrada = true;
         else existeFicheroSalida = true;
         //Fichero válido
+        System.out.println("SYSTEM: fichero "+(esEntrada?"de entrada":"de salida")+" válido.");
         return true;
     }
 
