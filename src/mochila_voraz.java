@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 public class mochila_voraz {
 
     static boolean existeFicheroEntrada = false; //Se modifica en validarFichero
+    static boolean existeFicheroSalida = false; //Se modifica en validarFichero
     static boolean trazasActivas = false;
     static boolean FINDEPROGAMA = false;
 
@@ -25,14 +26,12 @@ public class mochila_voraz {
             FINDEPROGAMA = true;
         }
 
-        if(args.length == 0){
-            System.out.println("SYSTEM: No se ha especificado fichero de entrada...se solicitarán los datos por entrada de teclado.");
-            System.out.println("SYSTEM: No se ha especificado fichero de salida...se creará un fichero con nombre salida_mochila_voraz.txt.");
-
-        }
-        else{
+        if(args.length > 0){
             if(!comprobarArgumentos(args)) FINDEPROGAMA = true;
         }
+
+        if(!existeFicheroEntrada && !FINDEPROGAMA) System.out.println("SYSTEM: No se ha especificado fichero de entrada...se solicitarán los datos por entrada de teclado.");
+        if(!existeFicheroSalida && !FINDEPROGAMA) System.out.println("SYSTEM: No se ha especificado fichero de salida...se creará un fichero con nombre salida_mochila_voraz.txt.");
 
         if (FINDEPROGAMA){
             System.out.println("SYSTEM: FIN DE PROGRAMA MOCHILA_VORAZ\n");
@@ -68,8 +67,7 @@ public class mochila_voraz {
             boolean esEntrada = false;
             switch (args[1]){
                 case "-t":
-                    System.out.println("SYSTEM: se han activado las trazas.");
-                    trazasActivas = true;
+                    trazasActivadas();
                     break;
                 case "-h":
                     mostrarAyuda();
@@ -88,8 +86,7 @@ public class mochila_voraz {
             boolean esEntrada = false;
             switch (args[0]){
                 case "-t":
-                    System.out.println("SYSTEM: se han activado las trazas.");
-                    trazasActivas = true;
+                    trazasActivadas();
                     break;
                 case "-h":
                     mostrarAyuda();
@@ -100,14 +97,17 @@ public class mochila_voraz {
                     break;
             }
             //Segundo argumento
-            return esValidoArgumentoFichero(args[2], !esEntrada);
+            if(args[1].equals("-t")) trazasActivadas();
+            else if(args[1].equals("-h")) mostrarAyuda();
+            else return esValidoArgumentoFichero(args[1], !esEntrada);
+
+            return true;
         }
         //Se utilizan 1 argumento
         else if(args.length == 1){
             switch (args[0]){
                 case "-t":
-                    System.out.println("SYSTEM: se han activado las trazas.");
-                    trazasActivas = true;
+                    trazasActivadas();
                     break;
                 case "-h":
                     mostrarAyuda();
@@ -120,6 +120,11 @@ public class mochila_voraz {
         else{
             return false;
         }
+    }
+
+    static void trazasActivadas(){
+        System.out.println("SYSTEM: se han activado las trazas.");
+        trazasActivas = true;
     }
 
     static boolean esValidoArgumento(String arg){
@@ -171,6 +176,8 @@ public class mochila_voraz {
             FINDEPROGAMA = true;
             return false;
         }
+        if(esEntrada) existeFicheroEntrada = true;
+        else existeFicheroSalida = true;
         //Fichero válido
         return true;
     }
@@ -207,7 +214,6 @@ public class mochila_voraz {
         //Comprobar validez de objetos
         regex = "^[0-9]+ +[0-9]+$";
         pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        matcher = pattern.matcher(arrayDatos[arrayDatos.length-1]);
 
         for(int i=1; i< arrayDatos.length-2; i++){
             matcher = pattern.matcher(arrayDatos[i]);
