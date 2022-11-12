@@ -1,17 +1,26 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class MainPruebas {
     public static void main(String[] args) {
-        System.out.println(System.getProperty("user.home"));
+        /*System.out.println(System.getProperty("user.home"));
         String archivo = System.getProperty("user.dir")+"\\FICHEROS\\"+"ficheroPruebas.txt";
         File fichero = new File(archivo);
 
         pruebas_de_ficheros(fichero);
-        validarDatos(leerFichero(fichero));
+        validarDatos(leerFichero(fichero));*/
+
+
+
+
+        ArrayList<String[]> casosPrueba = new ArrayList<>(100);
+        casosPrueba.add(new String[] {"-t"});
+
+        casosPrueba.forEach(caso -> mochila_voraz.main(caso));
 
     }
 
