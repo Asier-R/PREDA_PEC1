@@ -44,16 +44,12 @@ public class mochila_voraz {
         //Se utilizan 4 argumentos
         if(args.length == 4){
             //Primer argumento
-            //if(!esValidoArgumento(args[0])) return false;
             if(!esValidoArgumentoFichero(args[0], !existeFicheroEntrada)) return false;
             //Segundo argumento
-            //if(!esValidoArgumento(args[1])) return false;
             if(!esValidoArgumentoFichero(args[1], !existeFicheroEntrada)) return false;
             //Tercer argumento
-            //if(!esValidoArgumentoFichero(args[2], true)) return false;
             if(!esValidoArgumentoFichero(args[2], !existeFicheroEntrada)) return false;
             //Cuarto argumento
-            //return esValidoArgumentoFichero(args[3], false);
             return esValidoArgumentoFichero(args[3], !existeFicheroEntrada);
         }
         //Se utilizan 3 argumentos
