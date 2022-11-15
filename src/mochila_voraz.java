@@ -13,8 +13,12 @@ import java.util.regex.Pattern;
 public class mochila_voraz {
 
     static boolean existeFicheroEntrada = false; //Se modifica en validarFichero
+    static String ficheroEntrada = "";
     static boolean existeFicheroSalida = false; //Se modifica en validarFichero
+    static String ficheroSalida = "";
     static boolean trazasActivas = false;
+
+    static Mochila mochila;
     static boolean FINDEPROGAMA = false;
 
     public static void main(String[] args) {
@@ -33,6 +37,14 @@ public class mochila_voraz {
 
         if(!existeFicheroEntrada && !FINDEPROGAMA) System.out.println("SYSTEM: No se ha especificado fichero de entrada...se solicitarán los datos por entrada de teclado.");
         if(!existeFicheroSalida && !FINDEPROGAMA) System.out.println("SYSTEM: No se ha especificado fichero de salida...se creará un fichero con nombre salida_mochila_voraz.txt.");
+
+        if(existeFicheroEntrada){
+            //Se lee la entrada y se valida
+        }else{
+            //Se solicita al usuario que introduzca la entrada por teclado
+
+
+        }
 
         if (FINDEPROGAMA){
             System.out.println("SYSTEM: FIN DE PROGRAMA MOCHILA_VORAZ\n");
@@ -177,8 +189,15 @@ public class mochila_voraz {
             FINDEPROGAMA = true;
             return false;
         }
-        if(esEntrada) existeFicheroEntrada = true;
-        else existeFicheroSalida = true;
+        if(esEntrada) {
+            existeFicheroEntrada = true;
+            ficheroEntrada = nombre_fichero;
+
+        }
+        else{
+            existeFicheroSalida = true;
+            ficheroSalida = nombre_fichero;
+        }
         //Fichero válido
         System.out.println("SYSTEM: fichero "+(esEntrada?"de entrada":"de salida")+" válido.");
         return true;
@@ -246,6 +265,62 @@ public class mochila_voraz {
         }
 
         return datos;
+    }
+
+    static String entradaPorTeclado(){
+
+        Scanner entrada = new Scanner(System.in);
+
+        System.out.println("\nSYSTEM: inicio entrada por teclado...");
+        System.out.println("SYSTEM: introduzca la cantidad de tipos de objetos posibles");
+
+        Boolean entradaErronea = true;
+        int cantidad = 0;
+
+        //Cantidad de tipo de objetos
+        while(entradaErronea) {
+            try {
+                cantidad = entrada.nextInt();
+                entradaErronea = false;
+                System.out.println("SYSTEM: cantidad de tipos de objetos => "+cantidad);
+            } catch (Exception e) {
+                System.out.println("ERROR: no ha introducido un número entero.");
+                System.out.println("SYSTEM: si desea finalizar el programa escriba SI.");
+                if(entrada.nextLine().equalsIgnoreCase("SI")){
+                    entrada.nextLine();
+                    System.out.println("SYSTEM: ha finalizado el programa.");
+                    FINDEPROGAMA = true;
+                    return "FINDEENTRADA";
+                }
+            }
+        }
+
+        //Inicializamos la mochila
+        mochila = new Mochila(cantidad);
+
+        entradaErronea = true;
+        int i = 1;
+        while(entradaErronea){
+            try {
+                System.out.println(("SYSTEM: introduzca el peso del objeto "+i+" de "+cantidad));
+                float peso = entrada.nextFloat();
+                System.out.println(("SYSTEM: introduzca el beneficio del objeto "+i+" de "+cantidad));
+                float beneficio = entrada.nextFloat();
+                i++;
+                if(i == cantidad) entradaErronea = false;
+                System.out.println("SYSTEM: se ha introducido el objeto "+i+" de "+cantidad+" con peso "+peso+" y benficio "+beneficio);
+            } catch (Exception e) {
+                System.out.println("ERROR: no ha introducido un número.");
+                System.out.println("SYSTEM: si desea finalizar el programa escriba SI.");
+                if(entrada.nextLine().equalsIgnoreCase("SI")){
+                    System.out.println("SYSTEM: ha finalizado el programa.");
+                    FINDEPROGAMA = true;
+                    return "FINDEENTRADA";
+                }
+            }
+        }
+
+        return "FINDEENTRADA";
     }
 
 }

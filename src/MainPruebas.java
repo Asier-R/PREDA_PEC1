@@ -16,7 +16,7 @@ public class MainPruebas {
         validarDatos(leerFichero(fichero));*/
 
 
-        String fichero = "C:\\Users\\Monst\\Desktop\\UNED\\Asignaturas\\2022-2023\\Programacion y Estructuras de Datos Avanzadas\\PRACTICA 1\\PREDA_PEC1\\FICHEROS\\ficheroPruebas.txt";
+        /*String fichero = "C:\\Users\\Monst\\Desktop\\UNED\\Asignaturas\\2022-2023\\Programacion y Estructuras de Datos Avanzadas\\PRACTICA 1\\PREDA_PEC1\\FICHEROS\\ficheroPruebas.txt";
 
         ArrayList<String[]> casosPrueba = new ArrayList<>(100);
 
@@ -40,8 +40,10 @@ public class MainPruebas {
             mochila_voraz.trazasActivas = false;
             mochila_voraz.FINDEPROGAMA = false;
             System.out.println("-----------------------------------------------------------------------------------");
-        });
+        });*/
 
+        String basura = mochila_voraz.entradaPorTeclado();
+        System.out.println("ENTRADA: "+basura);
     }
 
     static void validarDatos(String datos){
@@ -118,4 +120,5 @@ public class MainPruebas {
         System.out.println("Readable " + fichero.canRead());
         System.out.println("File size in bytes " + fichero.length());
     }
+
 }
