@@ -15,7 +15,6 @@ public class MainPruebas {
         pruebas_de_ficheros(fichero);
         validarDatos(leerFichero(fichero));*/
 
-
         /*String fichero = "C:\\Users\\Monst\\Desktop\\UNED\\Asignaturas\\2022-2023\\Programacion y Estructuras de Datos Avanzadas\\PRACTICA 1\\PREDA_PEC1\\FICHEROS\\ficheroPruebas.txt";
 
         ArrayList<String[]> casosPrueba = new ArrayList<>(100);
@@ -29,9 +28,6 @@ public class MainPruebas {
         casosPrueba.add(new String[] {fichero,"-h","-t","-t"});
         casosPrueba.add(new String[] {"-t","-h","-t","-t"});
 
-
-
-
         casosPrueba.forEach(caso -> {
             System.out.println("CASO: "+ Arrays.stream(caso).toList().toString());
             mochila_voraz.main(caso);
@@ -42,8 +38,8 @@ public class MainPruebas {
             System.out.println("-----------------------------------------------------------------------------------");
         });*/
 
-        String basura = mochila_voraz.entradaPorTeclado();
-        System.out.println("ENTRADA: "+basura);
+        mochila_voraz.entradaPorTeclado();
+
     }
 
     static void validarDatos(String datos){

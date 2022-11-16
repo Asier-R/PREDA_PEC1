@@ -17,7 +17,6 @@ public class mochila_voraz {
     static boolean existeFicheroSalida = false; //Se modifica en validarFichero
     static String ficheroSalida = "";
     static boolean trazasActivas = false;
-
     static Mochila mochila;
     static boolean FINDEPROGAMA = false;
 
@@ -267,12 +266,11 @@ public class mochila_voraz {
         return datos;
     }
 
-    static String entradaPorTeclado(){
+    static void entradaPorTeclado(){
 
         Scanner entrada = new Scanner(System.in);
 
         System.out.println("\nSYSTEM: inicio entrada por teclado...");
-        System.out.println("SYSTEM: introduzca la cantidad de tipos de objetos posibles");
 
         Boolean entradaErronea = true;
         int cantidad = 0;
@@ -280,47 +278,122 @@ public class mochila_voraz {
         //Cantidad de tipo de objetos
         while(entradaErronea) {
             try {
+                System.out.println("SYSTEM: introduzca la cantidad de tipos de objetos posibles");
                 cantidad = entrada.nextInt();
+                if(cantidad <= 0) throw new Exception("ERROR: no ha introducido un número entero mayor a cero.");
                 entradaErronea = false;
                 System.out.println("SYSTEM: cantidad de tipos de objetos => "+cantidad);
+                entrada.nextLine();
             } catch (Exception e) {
-                System.out.println("ERROR: no ha introducido un número entero.");
+                entrada.nextLine();
+                System.out.println(e.getMessage().contains("null")?"ERROR: no ha introducido un número.":e.getMessage());
                 System.out.println("SYSTEM: si desea finalizar el programa escriba SI.");
-                if(entrada.nextLine().equalsIgnoreCase("SI")){
-                    entrada.nextLine();
+                String opcion = entrada.nextLine();
+                if(opcion.equalsIgnoreCase("SI")){
                     System.out.println("SYSTEM: ha finalizado el programa.");
                     FINDEPROGAMA = true;
-                    return "FINDEENTRADA";
+                    return;
                 }
+                entrada.nextLine();
             }
         }
 
         //Inicializamos la mochila
         mochila = new Mochila(cantidad);
 
-        entradaErronea = true;
-        int i = 1;
-        while(entradaErronea){
+        int i = 0;
+
+        //Objetos posibles
+        while(i < cantidad){
             try {
-                System.out.println(("SYSTEM: introduzca el peso del objeto "+i+" de "+cantidad));
+                System.out.println(("SYSTEM: introduzca el peso del objeto ("+(i+1)+"/"+cantidad+")"));
                 float peso = entrada.nextFloat();
-                System.out.println(("SYSTEM: introduzca el beneficio del objeto "+i+" de "+cantidad));
+                if(peso <= 0) throw new Exception("ERROR: peso menor o igual a cero.");
+                System.out.println(("SYSTEM: introduzca el beneficio del objeto ("+(i+1)+"/"+cantidad+")"));
                 float beneficio = entrada.nextFloat();
+                if(beneficio < 0) throw new Exception("ERROR: beneficio menor a cero.");
+                System.out.println("SYSTEM: se ha introducido un objeto con peso "+peso+" y beneficio "+beneficio+" ("+(i+1)+"/"+cantidad+")");
                 i++;
-                if(i == cantidad) entradaErronea = false;
-                System.out.println("SYSTEM: se ha introducido el objeto "+i+" de "+cantidad+" con peso "+peso+" y benficio "+beneficio);
+                entrada.nextLine();
             } catch (Exception e) {
-                System.out.println("ERROR: no ha introducido un número.");
+                entrada.nextLine();
+                System.out.println(e.getMessage().contains("null")?"ERROR: no ha introducido un número.":e.getMessage());
                 System.out.println("SYSTEM: si desea finalizar el programa escriba SI.");
-                if(entrada.nextLine().equalsIgnoreCase("SI")){
+                String opcion = entrada.nextLine();
+                if(opcion.equalsIgnoreCase("SI")){
                     System.out.println("SYSTEM: ha finalizado el programa.");
                     FINDEPROGAMA = true;
-                    return "FINDEENTRADA";
+                    return;
                 }
+                entrada.nextLine();
             }
         }
 
-        return "FINDEENTRADA";
+        entradaErronea = true;
+
+        //Capacidad mochila
+        while(entradaErronea){
+            try {
+                System.out.println("SYSTEM: introduce la capacidad de la mochila.");
+                float cap = entrada.nextFloat();
+                if(cap <= 0) throw new Exception("ERROR: no ha introducido un número entero mayor a cero.");
+                mochila.setCapacidad(cap);
+                entradaErronea = false;
+                System.out.println("SYSTEM: la capacidad de la mochila es => "+mochila.getCapacidad());
+            } catch (Exception e) {
+                entrada.nextLine();
+                System.out.println(e.getMessage().contains("null")?"ERROR: no ha introducido un número.":e.getMessage());
+                System.out.println("SYSTEM: si desea finalizar el programa escriba SI.");
+                String opcion = entrada.nextLine();
+                if(opcion.equalsIgnoreCase("SI")){
+                    System.out.println("SYSTEM: ha finalizado el programa.");
+                    FINDEPROGAMA = true;
+                    return;
+                }
+                entrada.nextLine();
+            }
+        }
+
+        System.out.println("SYSTEM: los datos de la mochila son:");
+        System.out.println("SYSTEM: objetos => "+mochila.getPesos().length);
+        for (int e=0; e<mochila.getPesos().length; e++)
+            System.out.println("SYSTEM: "+e+" => peso: "+mochila.getPesos()[e]+" beneficio: "+mochila.getBeneficios()[e]);
+        System.out.println("SYSTEM: capacidad => "+mochila.getCapacidad());
+    }
+
+
+
+
+
+}
+
+class Mochila {
+
+    private int cantidadObjetos;
+    private float[] pesos;
+    private float[] beneficios;
+    private float capacidad;
+
+    public Mochila(int cantidad_de_objetos){
+        this.cantidadObjetos = cantidad_de_objetos;
+        this.pesos = new float[cantidad_de_objetos];
+        this.beneficios = new float[cantidad_de_objetos];
+    }
+
+    public float[] getPesos(){
+        return this.pesos;
+    }
+
+    public float[] getBeneficios(){
+        return this.beneficios;
+    }
+
+    public void setCapacidad(float volumen_mochila){
+        this.capacidad = volumen_mochila;
+    }
+
+    public float getCapacidad(){
+        return this.capacidad;
     }
 
 }
