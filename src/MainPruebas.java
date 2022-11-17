@@ -38,7 +38,14 @@ public class MainPruebas {
             System.out.println("-----------------------------------------------------------------------------------");
         });*/
 
-        mochila_voraz.entradaPorTeclado();
+        //mochila_voraz.entradaPorTeclado();
+
+        //String[] sp = ("10\n10 43\n2 2.3\n20").split("\n");
+        //for(int i=0; i<sp.length; i++)
+        //    System.out.println(sp[i]);
+
+        //float p = Float.parseFloat("8.2");
+        //System.out.println(p);
 
     }
 

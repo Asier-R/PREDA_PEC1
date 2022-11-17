@@ -39,11 +39,15 @@ public class mochila_voraz {
 
         if(existeFicheroEntrada){
             //Se lee la entrada y se valida
+            validarDatos(leerFichero(ficheroEntrada));
         }else{
             //Se solicita al usuario que introduzca la entrada por teclado
-
-
+            entradaPorTeclado();
         }
+
+
+
+
 
         if (FINDEPROGAMA){
             System.out.println("SYSTEM: FIN DE PROGRAMA MOCHILA_VORAZ\n");
@@ -216,7 +220,7 @@ public class mochila_voraz {
             System.out.println("ERROR: no se ha introducido el número de objetos.");
 
         //Capacidad de la mochila
-        regex = "^[0-9]+$";
+        regex = "^[0-9]+(?:.[0-9]+)$";
         pattern = Pattern.compile(regex, Pattern.MULTILINE);
         matcher = pattern.matcher(arrayDatos[arrayDatos.length-1]);
 
@@ -244,7 +248,7 @@ public class mochila_voraz {
         System.out.println("SYSTEM: fin de validación de los datos.");
     }
 
-    static String leerFichero(String path){
+    static String[] leerFichero(String path){
         //Obtenemos el fichero
         String archivo = System.getProperty(path);
         File fichero = new File(archivo);
@@ -263,7 +267,7 @@ public class mochila_voraz {
             e.printStackTrace();
         }
 
-        return datos;
+        return datos.split("\n");
     }
 
     static void entradaPorTeclado(){
