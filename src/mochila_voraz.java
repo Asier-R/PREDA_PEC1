@@ -37,12 +37,12 @@ public class mochila_voraz {
         if(!existeFicheroEntrada && !FINDEPROGAMA) System.out.println("SYSTEM: No se ha especificado fichero de entrada...se solicitarán los datos por entrada de teclado.");
         if(!existeFicheroSalida && !FINDEPROGAMA) System.out.println("SYSTEM: No se ha especificado fichero de salida...se creará un fichero con nombre salida_mochila_voraz.txt.");
 
-        if(existeFicheroEntrada){
-            //Se lee la entrada y se valida
-            validarDatos(leerFichero(ficheroEntrada));
-        }else{
+        if(existeFicheroEntrada && !FINDEPROGAMA){
+            //Lectura y validación de la entrada
+            FINDEPROGAMA = !sonValidosDatosFichero(leerFichero(ficheroEntrada));
+        }else if(!FINDEPROGAMA){
             //Se solicita al usuario que introduzca la entrada por teclado
-            entradaPorTeclado();
+            FINDEPROGAMA = !esEntradaPorTecladoValida();
         }
 
 
@@ -206,49 +206,71 @@ public class mochila_voraz {
         return true;
     }
 
-    static void validarDatos(String[] arrayDatos){
+    static boolean sonValidosDatosFichero(String datos){
         System.out.println("SYSTEM: inicio de la validación de los datos.");
 
+        //Estructura del fichero
+        Pattern pattern = Pattern.compile("^(?:[0-9]+)\\s+(?:(?:(?:[0-9]+(?:\\.[0-9]+)?) (?:[0-9]+(?:\\.[0-9]+)?))\\s+)+(?:[0-9]+(?:\\.[0-9]+)?)$", Pattern.MULTILINE);
+        Matcher matcher = pattern.matcher(datos);
+
+        if(matcher.find())
+            System.out.println("SYSTEM: el fichero está correctamente estructurado.");
+        else
+            System.out.println("ERROR: el fichero no está correctamente estructurado.\n"+
+            "ERROR: el número de objetos del conjunto debe estar en la primera linea del fichero y ser un número entero.\n"+
+            "ERROR: la capacidad de la mochila debe estar en la última linea del fichero.\n"+
+            "ERROR: los objetos deben indicarse a partir de la primer linea del fichero. Cada linea tendrá el peso, un espacio y el beneficio.");
+
+        String[] arrayDatos = datos.split("\n");
+
         //Número de objetos
-        String regex = "^[0-9]+$";
-        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        Matcher matcher = pattern.matcher(arrayDatos[0]);
+        pattern = Pattern.compile("^[0-9]+$", Pattern.MULTILINE);
+        matcher = pattern.matcher(arrayDatos[0]);
 
         if(matcher.find())
             System.out.println("SYSTEM: el número de objetos es "+arrayDatos[0]+".");
         else
-            System.out.println("ERROR: no se ha introducido el número de objetos.");
+            System.out.println("ERROR: no se ha introducido correctamente el número de objetos => "+arrayDatos[0]);
 
         //Capacidad de la mochila
-        regex = "^[0-9]+(?:.[0-9]+)$";
-        pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        pattern = Pattern.compile("^[0-9]+(?:\\.[0-9]+)?$", Pattern.MULTILINE);
         matcher = pattern.matcher(arrayDatos[arrayDatos.length-1]);
 
         if(matcher.find())
             System.out.println("SYSTEM: la capacidad de la mochila es "+arrayDatos[arrayDatos.length-1]+".");
         else
-            System.out.println("ERROR: no se ha introducido la capacidad de la mochila.");
+            System.out.println("ERROR: no se ha introducido correctamente la capacidad de la mochila => "+arrayDatos[arrayDatos.length-1]);
 
         //El número de objetos coincide con lo indicado en la primera línea
         if(arrayDatos.length-2 == Integer.parseInt(arrayDatos[0]))
             System.out.println("SYSTEM: el número de objetos es coherente con lo indicado.");
         else
-            System.out.println("ERROR: el número de objetos no cuadra con lo indicado.");
+            System.out.println("ERROR: el número de objetos no cuadra con lo indicado => num:"+arrayDatos[0]+" <> cap:"+(arrayDatos.length-2));
+
+        //Inicializar mochila
+        mochila = new Mochila(arrayDatos.length-2);
+        mochila.setCapacidad(Float.parseFloat(arrayDatos[arrayDatos.length-1]));
 
         //Comprobar validez de objetos
-        regex = "^[0-9]+ +[0-9]+$";
-        pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        pattern = Pattern.compile("^([0-9]+(?:\\.[0-9]+)?) ([0-9]+(?:\\.[0-9]+)?)$", Pattern.MULTILINE);
 
         for(int i=1; i< arrayDatos.length-2; i++){
             matcher = pattern.matcher(arrayDatos[i]);
-            if(!matcher.find())
-                System.out.println("ERROR: uno de los objetos no tiene el formato correcto.");
+            if(!matcher.find()) {
+                System.out.println("ERROR: el objeto "+(arrayDatos[i])+" no tiene el formato correcto.");
+                return false;
+            }
+            else {
+
+            }
+
         }
 
         System.out.println("SYSTEM: fin de validación de los datos.");
+        return true;
     }
 
-    static String[] leerFichero(String path){
+    static String leerFichero(String path){
         //Obtenemos el fichero
         String archivo = System.getProperty(path);
         File fichero = new File(archivo);
@@ -267,10 +289,10 @@ public class mochila_voraz {
             e.printStackTrace();
         }
 
-        return datos.split("\n");
+        return datos;
     }
 
-    static void entradaPorTeclado(){
+    static boolean esEntradaPorTecladoValida(){
 
         Scanner entrada = new Scanner(System.in);
 
@@ -289,16 +311,7 @@ public class mochila_voraz {
                 System.out.println("SYSTEM: cantidad de tipos de objetos => "+cantidad);
                 entrada.nextLine();
             } catch (Exception e) {
-                entrada.nextLine();
-                System.out.println(e.getMessage().contains("null")?"ERROR: no ha introducido un número.":e.getMessage());
-                System.out.println("SYSTEM: si desea finalizar el programa escriba SI.");
-                String opcion = entrada.nextLine();
-                if(opcion.equalsIgnoreCase("SI")){
-                    System.out.println("SYSTEM: ha finalizado el programa.");
-                    FINDEPROGAMA = true;
-                    return;
-                }
-                entrada.nextLine();
+                if(finalizarEjecucion(entrada, e)) return false; //Terminar programa
             }
         }
 
@@ -320,16 +333,7 @@ public class mochila_voraz {
                 i++;
                 entrada.nextLine();
             } catch (Exception e) {
-                entrada.nextLine();
-                System.out.println(e.getMessage().contains("null")?"ERROR: no ha introducido un número.":e.getMessage());
-                System.out.println("SYSTEM: si desea finalizar el programa escriba SI.");
-                String opcion = entrada.nextLine();
-                if(opcion.equalsIgnoreCase("SI")){
-                    System.out.println("SYSTEM: ha finalizado el programa.");
-                    FINDEPROGAMA = true;
-                    return;
-                }
-                entrada.nextLine();
+                if(finalizarEjecucion(entrada, e)) return false; //Terminar programa
             }
         }
 
@@ -345,16 +349,7 @@ public class mochila_voraz {
                 entradaErronea = false;
                 System.out.println("SYSTEM: la capacidad de la mochila es => "+mochila.getCapacidad());
             } catch (Exception e) {
-                entrada.nextLine();
-                System.out.println(e.getMessage().contains("null")?"ERROR: no ha introducido un número.":e.getMessage());
-                System.out.println("SYSTEM: si desea finalizar el programa escriba SI.");
-                String opcion = entrada.nextLine();
-                if(opcion.equalsIgnoreCase("SI")){
-                    System.out.println("SYSTEM: ha finalizado el programa.");
-                    FINDEPROGAMA = true;
-                    return;
-                }
-                entrada.nextLine();
+                if(finalizarEjecucion(entrada, e)) return false; //Terminar programa
             }
         }
 
@@ -363,11 +358,24 @@ public class mochila_voraz {
         for (int e=0; e<mochila.getPesos().length; e++)
             System.out.println("SYSTEM: "+e+" => peso: "+mochila.getPesos()[e]+" beneficio: "+mochila.getBeneficios()[e]);
         System.out.println("SYSTEM: capacidad => "+mochila.getCapacidad());
+
+        //Finaliza correctamente
+        return true;
     }
 
-
-
-
+    static boolean finalizarEjecucion(Scanner entrada, Exception e){
+        entrada.nextLine();
+        System.out.println(e.getMessage().contains("null")?"ERROR: no ha introducido un número.":e.getMessage());
+        System.out.println("SYSTEM: si desea finalizar el programa escriba SI.");
+        String opcion = entrada.nextLine();
+        if(opcion.equalsIgnoreCase("SI")){
+            System.out.println("SYSTEM: ha finalizado el programa.");
+            entrada.close();
+            return true;
+        }
+        entrada.nextLine();
+        return false;
+    }
 
 }
 
@@ -398,6 +406,10 @@ class Mochila {
 
     public float getCapacidad(){
         return this.capacidad;
+    }
+
+    public int getCantidadObjetos(){
+        return cantidadObjetos;
     }
 
 }
