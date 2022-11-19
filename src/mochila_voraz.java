@@ -269,7 +269,8 @@ public class mochila_voraz {
                 throw new FileSystemException("ERROR: el objeto "+(arrayDatos[i])+" no tiene el formato correcto.");
             }
             else {
-
+                mochila.getPesos()[i-1]      = Float.parseFloat(matcher.group(0));
+                mochila.getBeneficios()[i-1] = Float.parseFloat(matcher.group(1));
             }
 
         }
