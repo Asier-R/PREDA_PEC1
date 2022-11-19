@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.FileSystemException;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,44 +20,83 @@ public class mochila_voraz {
     static String ficheroSalida = "";
     static boolean trazasActivas = false;
     static Mochila mochila;
-    static boolean FINDEPROGAMA = false;
 
     public static void main(String[] args) {
+        System.out.println("\nSYSTEM: INICIO DE PROGRAMA MOCHILA_VORAZ\n\n");
+        try {
+            if (args.length > 4) {
+                mostrarAyuda();
+                throw new IllegalArgumentException("ERROR: ha introducido " + (args.length - 4) + " argumentos más de los permitidos.");
+            }
 
-         System.out.println("\nSYSTEM: INICIO DE PROGRAMA MOCHILA_VORAZ\n\n");
+            if (args.length > 0) {
+                if (!sonArgumentosValidos(args)) throw new IllegalArgumentException("ERROR: argumentos de entrada no válidos.");
+            }
 
-        if(args.length > 4) {
-            System.out.println("SYSTEM: Ha introducido "+(args.length-4)+" argumentos más de los permitidos.");
+            if (!existeFicheroEntrada)
+                System.out.println("SYSTEM: No se ha especificado fichero de entrada...se solicitarán los datos por entrada de teclado.");
+            if (!existeFicheroSalida)
+                System.out.println("SYSTEM: No se ha especificado fichero de salida...se creará un fichero con nombre salida_mochila_voraz.txt.");
+
+            if (existeFicheroEntrada) {
+                //Lectura y validación de la entrada
+                sonValidosDatosFichero(leerFichero(ficheroEntrada));
+            } else {
+                //Se solicita al usuario que introduzca la entrada por teclado
+                esEntradaPorTecladoValida();
+            }
+
+
+
+
+        }catch (IllegalArgumentException iae) {
+            if(iae.getMessage().startsWith("ERROR: "))
+                System.out.println(iae.getMessage());
+            else
+                System.out.println("ERROR: error inesperado => "+iae.getMessage());
+
             mostrarAyuda();
-            FINDEPROGAMA = true;
+
+        } catch (FileNotFoundException fne) {
+            if(fne.getMessage().startsWith("ERROR: "))
+                System.out.println(fne.getMessage());
+            else
+                System.out.println("ERROR: error inesperado => "+fne.getMessage());
+
+        }catch(FileSystemException fse){
+            if(fse.getMessage().startsWith("ERROR: "))
+                System.out.println(fse.getMessage());
+            else
+                System.out.println("ERROR: error inesperado => "+fse.getMessage());
+
+        }catch (IOException io){
+            if(io.getMessage().startsWith("ERROR: "))
+                System.out.println(io.getMessage());
+            else
+                System.out.println("ERROR: error inesperado => "+io.getMessage());
+
+        }catch (Exception e){
+            if(e.getMessage().startsWith("ERROR: "))
+                System.out.println(e.getMessage());
+            else
+                System.out.println("ERROR: error inesperado => "+e.getMessage());
+
         }
 
-        if(args.length > 0){
-            if(!comprobarArgumentos(args)) FINDEPROGAMA = true;
-        }
 
-        if(!existeFicheroEntrada && !FINDEPROGAMA) System.out.println("SYSTEM: No se ha especificado fichero de entrada...se solicitarán los datos por entrada de teclado.");
-        if(!existeFicheroSalida && !FINDEPROGAMA) System.out.println("SYSTEM: No se ha especificado fichero de salida...se creará un fichero con nombre salida_mochila_voraz.txt.");
-
-        if(existeFicheroEntrada && !FINDEPROGAMA){
-            //Lectura y validación de la entrada
-            FINDEPROGAMA = !sonValidosDatosFichero(leerFichero(ficheroEntrada));
-        }else if(!FINDEPROGAMA){
-            //Se solicita al usuario que introduzca la entrada por teclado
-            FINDEPROGAMA = !esEntradaPorTecladoValida();
-        }
+        System.out.println("SYSTEM: FIN DE PROGRAMA MOCHILA_VORAZ\n");
 
 
-
-
-
-        if (FINDEPROGAMA){
-            System.out.println("SYSTEM: FIN DE PROGRAMA MOCHILA_VORAZ\n");
-            return;
-        }
     }
 
-    static boolean comprobarArgumentos(String[] args){
+    static <Excep extends Exception> void gestionarMensajeError(Excep e){
+        if(e.getMessage().startsWith("ERROR: "))
+            System.out.println(e.getMessage());
+        else
+            System.out.println("ERROR: error inesperado => "+e.getMessage());
+    }
+
+    static boolean sonArgumentosValidos(String[] args){
         //Se utilizan 4 argumentos
         if(args.length == 4){
             //Primer argumento
@@ -171,25 +212,21 @@ public class mochila_voraz {
         //¿Existe fichero?
         if(!fichero.exists()) {
             System.out.println("ERROR: el fichero no existe.");
-            FINDEPROGAMA = true;
             return false;
         }
         //¿Es fichero válido?
         if(!fichero.isFile()) {
             System.out.println("ERROR: no es un fichero válido.");
-            FINDEPROGAMA = true;
             return false;
         }
         //¿Se puede leer?
         if(esEntrada && !fichero.canRead()) {
             System.out.println("ERROR: el fichero no se puede leer.");
-            FINDEPROGAMA = true;
             return false;
         }
         //¿Se puede escribir?
         if(!esEntrada && !fichero.canWrite()) {
             System.out.println("ERROR: no se puede escribir en el fichero.");
-            FINDEPROGAMA = true;
             return false;
         }
         if(esEntrada) {
@@ -206,7 +243,7 @@ public class mochila_voraz {
         return true;
     }
 
-    static boolean sonValidosDatosFichero(String datos){
+    static void sonValidosDatosFichero(String datos) throws FileSystemException {
         System.out.println("SYSTEM: inicio de la validación de los datos.");
 
         //Estructura del fichero
@@ -216,7 +253,7 @@ public class mochila_voraz {
         if(matcher.find())
             System.out.println("SYSTEM: el fichero está correctamente estructurado.");
         else
-            System.out.println("ERROR: el fichero no está correctamente estructurado.\n"+
+            throw new FileSystemException("ERROR: el fichero no está correctamente estructurado.\n"+
             "ERROR: el número de objetos del conjunto debe estar en la primera linea del fichero y ser un número entero.\n"+
             "ERROR: la capacidad de la mochila debe estar en la última linea del fichero.\n"+
             "ERROR: los objetos deben indicarse a partir de la primer linea del fichero. Cada linea tendrá el peso, un espacio y el beneficio.");
@@ -230,7 +267,7 @@ public class mochila_voraz {
         if(matcher.find())
             System.out.println("SYSTEM: el número de objetos es "+arrayDatos[0]+".");
         else
-            System.out.println("ERROR: no se ha introducido correctamente el número de objetos => "+arrayDatos[0]);
+            throw new FileSystemException("ERROR: no se ha introducido correctamente el número de objetos => "+arrayDatos[0]);
 
         //Capacidad de la mochila
         pattern = Pattern.compile("^[0-9]+(?:\\.[0-9]+)?$", Pattern.MULTILINE);
@@ -239,13 +276,13 @@ public class mochila_voraz {
         if(matcher.find())
             System.out.println("SYSTEM: la capacidad de la mochila es "+arrayDatos[arrayDatos.length-1]+".");
         else
-            System.out.println("ERROR: no se ha introducido correctamente la capacidad de la mochila => "+arrayDatos[arrayDatos.length-1]);
+            throw new FileSystemException("ERROR: no se ha introducido correctamente la capacidad de la mochila => "+arrayDatos[arrayDatos.length-1]);
 
         //El número de objetos coincide con lo indicado en la primera línea
         if(arrayDatos.length-2 == Integer.parseInt(arrayDatos[0]))
             System.out.println("SYSTEM: el número de objetos es coherente con lo indicado.");
         else
-            System.out.println("ERROR: el número de objetos no cuadra con lo indicado => num:"+arrayDatos[0]+" <> cap:"+(arrayDatos.length-2));
+            throw new FileSystemException("ERROR: el número de objetos no cuadra con lo indicado => num:"+arrayDatos[0]+" <> cap:"+(arrayDatos.length-2));
 
         //Inicializar mochila
         mochila = new Mochila(arrayDatos.length-2);
@@ -257,8 +294,7 @@ public class mochila_voraz {
         for(int i=1; i< arrayDatos.length-2; i++){
             matcher = pattern.matcher(arrayDatos[i]);
             if(!matcher.find()) {
-                System.out.println("ERROR: el objeto "+(arrayDatos[i])+" no tiene el formato correcto.");
-                return false;
+                throw new FileSystemException("ERROR: el objeto "+(arrayDatos[i])+" no tiene el formato correcto.");
             }
             else {
 
@@ -267,32 +303,26 @@ public class mochila_voraz {
         }
 
         System.out.println("SYSTEM: fin de validación de los datos.");
-        return true;
     }
 
-    static String leerFichero(String path){
+    static String leerFichero(String path) throws FileNotFoundException{
         //Obtenemos el fichero
         String archivo = System.getProperty(path);
         File fichero = new File(archivo);
 
         String datos = "";
-        try {
-            Scanner lector = new Scanner(fichero);
 
-            while(lector.hasNext())
-                datos+=lector.nextLine()+"\n";
+        Scanner lector = new Scanner(fichero);
 
-            System.out.println("LECTURA: \n"+datos);
+        while(lector.hasNext())
+            datos+=lector.nextLine()+"\n";
 
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
+        System.out.println("SYSTEM: lectura => \n"+datos);
 
         return datos;
     }
 
-    static boolean esEntradaPorTecladoValida(){
+    static void esEntradaPorTecladoValida() throws IOException{
 
         Scanner entrada = new Scanner(System.in);
 
@@ -311,7 +341,7 @@ public class mochila_voraz {
                 System.out.println("SYSTEM: cantidad de tipos de objetos => "+cantidad);
                 entrada.nextLine();
             } catch (Exception e) {
-                if(finalizarEjecucion(entrada, e)) return false; //Terminar programa
+                decidirSiFinalizarEjecucion(entrada, e);
             }
         }
 
@@ -333,7 +363,7 @@ public class mochila_voraz {
                 i++;
                 entrada.nextLine();
             } catch (Exception e) {
-                if(finalizarEjecucion(entrada, e)) return false; //Terminar programa
+                decidirSiFinalizarEjecucion(entrada, e);
             }
         }
 
@@ -349,7 +379,7 @@ public class mochila_voraz {
                 entradaErronea = false;
                 System.out.println("SYSTEM: la capacidad de la mochila es => "+mochila.getCapacidad());
             } catch (Exception e) {
-                if(finalizarEjecucion(entrada, e)) return false; //Terminar programa
+                decidirSiFinalizarEjecucion(entrada, e);
             }
         }
 
@@ -359,22 +389,18 @@ public class mochila_voraz {
             System.out.println("SYSTEM: "+e+" => peso: "+mochila.getPesos()[e]+" beneficio: "+mochila.getBeneficios()[e]);
         System.out.println("SYSTEM: capacidad => "+mochila.getCapacidad());
 
-        //Finaliza correctamente
-        return true;
     }
 
-    static boolean finalizarEjecucion(Scanner entrada, Exception e){
+    static void decidirSiFinalizarEjecucion(Scanner entrada, Exception e) throws IOException {
         entrada.nextLine();
         System.out.println(e.getMessage().contains("null")?"ERROR: no ha introducido un número.":e.getMessage());
         System.out.println("SYSTEM: si desea finalizar el programa escriba SI.");
         String opcion = entrada.nextLine();
         if(opcion.equalsIgnoreCase("SI")){
-            System.out.println("SYSTEM: ha finalizado el programa.");
             entrada.close();
-            return true;
+            throw new IOException("ERROR: se ha interrumpido la entrada de datos, se finaliza la ejecución del programa.");
         }
         entrada.nextLine();
-        return false;
     }
 
 }
