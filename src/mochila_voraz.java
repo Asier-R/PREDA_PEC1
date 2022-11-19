@@ -50,36 +50,11 @@ public class mochila_voraz {
 
 
         }catch (IllegalArgumentException iae) {
-            if(iae.getMessage().startsWith("ERROR: "))
-                System.out.println(iae.getMessage());
-            else
-                System.out.println("ERROR: error inesperado => "+iae.getMessage());
-
+            gestionarMensajeError(iae);
             mostrarAyuda();
 
-        } catch (FileNotFoundException fne) {
-            if(fne.getMessage().startsWith("ERROR: "))
-                System.out.println(fne.getMessage());
-            else
-                System.out.println("ERROR: error inesperado => "+fne.getMessage());
-
-        }catch(FileSystemException fse){
-            if(fse.getMessage().startsWith("ERROR: "))
-                System.out.println(fse.getMessage());
-            else
-                System.out.println("ERROR: error inesperado => "+fse.getMessage());
-
-        }catch (IOException io){
-            if(io.getMessage().startsWith("ERROR: "))
-                System.out.println(io.getMessage());
-            else
-                System.out.println("ERROR: error inesperado => "+io.getMessage());
-
-        }catch (Exception e){
-            if(e.getMessage().startsWith("ERROR: "))
-                System.out.println(e.getMessage());
-            else
-                System.out.println("ERROR: error inesperado => "+e.getMessage());
+        } catch (Exception e) {
+            gestionarMensajeError(e);
 
         }
 
@@ -90,10 +65,7 @@ public class mochila_voraz {
     }
 
     static <Excep extends Exception> void gestionarMensajeError(Excep e){
-        if(e.getMessage().startsWith("ERROR: "))
-            System.out.println(e.getMessage());
-        else
-            System.out.println("ERROR: error inesperado => "+e.getMessage());
+        System.out.println(e.getMessage().startsWith("ERROR: ")?e.getMessage():"ERROR: error inesperado => "+e.getMessage());
     }
 
     static boolean sonArgumentosValidos(String[] args){
@@ -207,7 +179,7 @@ public class mochila_voraz {
     }
 
     static boolean validarFichero(String nombre_fichero, Boolean esEntrada){
-        System.out.println("SYSTEM: inicio de validación de fichero "+(esEntrada?"de entrada":"de salida")+" "+nombre_fichero+".");
+        System.out.println("SYSTEM: se comprueba fichero "+(esEntrada?"de entrada":"de salida")+" "+nombre_fichero+".");
         File fichero = new File(nombre_fichero);
         //¿Existe fichero?
         if(!fichero.exists()) {
@@ -239,7 +211,7 @@ public class mochila_voraz {
             ficheroSalida = nombre_fichero;
         }
         //Fichero válido
-        System.out.println("SYSTEM: fichero "+(esEntrada?"de entrada":"de salida")+" válido.");
+        System.out.println("SYSTEM: el fichero "+(esEntrada?"de entrada":"de salida")+" se puede procesar.");
         return true;
     }
 
@@ -307,8 +279,7 @@ public class mochila_voraz {
 
     static String leerFichero(String path) throws FileNotFoundException{
         //Obtenemos el fichero
-        String archivo = System.getProperty(path);
-        File fichero = new File(archivo);
+        File fichero = new File(path);
 
         String datos = "";
 
@@ -317,7 +288,7 @@ public class mochila_voraz {
         while(lector.hasNext())
             datos+=lector.nextLine()+"\n";
 
-        System.out.println("SYSTEM: lectura => \n"+datos);
+        System.out.println("SYSTEM: lectura de fichero de entrada => \n"+datos);
 
         return datos;
     }
@@ -356,9 +327,11 @@ public class mochila_voraz {
                 System.out.println(("SYSTEM: introduzca el peso del objeto ("+(i+1)+"/"+cantidad+")"));
                 float peso = entrada.nextFloat();
                 if(peso <= 0) throw new Exception("ERROR: peso menor o igual a cero.");
+                mochila.getPesos()[i] = peso;
                 System.out.println(("SYSTEM: introduzca el beneficio del objeto ("+(i+1)+"/"+cantidad+")"));
                 float beneficio = entrada.nextFloat();
                 if(beneficio < 0) throw new Exception("ERROR: beneficio menor a cero.");
+                mochila.getBeneficios()[i] = beneficio;
                 System.out.println("SYSTEM: se ha introducido un objeto con peso "+peso+" y beneficio "+beneficio+" ("+(i+1)+"/"+cantidad+")");
                 i++;
                 entrada.nextLine();
@@ -383,17 +356,17 @@ public class mochila_voraz {
             }
         }
 
-        System.out.println("SYSTEM: los datos de la mochila son:");
-        System.out.println("SYSTEM: objetos => "+mochila.getPesos().length);
+        System.out.println("SYSTEM: los datos de la mochila son => ");
+        System.out.println("objetos: "+mochila.getPesos().length);
         for (int e=0; e<mochila.getPesos().length; e++)
-            System.out.println("SYSTEM: "+e+" => peso: "+mochila.getPesos()[e]+" beneficio: "+mochila.getBeneficios()[e]);
-        System.out.println("SYSTEM: capacidad => "+mochila.getCapacidad());
+            System.out.println("peso: "+mochila.getPesos()[e]+" beneficio: "+mochila.getBeneficios()[e]);
+        System.out.println("capacidad: "+mochila.getCapacidad());
 
     }
 
     static void decidirSiFinalizarEjecucion(Scanner entrada, Exception e) throws IOException {
         entrada.nextLine();
-        System.out.println(e.getMessage().contains("null")?"ERROR: no ha introducido un número.":e.getMessage());
+        System.out.println((e.getMessage() == null || e.getMessage().contains("null"))?"ERROR: no ha introducido un número. Para introducir un decimal use la coma.":e.getMessage());
         System.out.println("SYSTEM: si desea finalizar el programa escriba SI.");
         String opcion = entrada.nextLine();
         if(opcion.equalsIgnoreCase("SI")){

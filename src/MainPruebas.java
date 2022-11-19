@@ -44,12 +44,17 @@ public class MainPruebas {
 
         //float p = Float.parseFloat("8.2");
         //System.out.println(p);
+
         try {
-            String fichero = "C:\\Users\\izask\\Desktop\\UNED\\Asignaturas\\2022-2023\\Programacion y Estructuras de Datos Avanzadas\\PRACTICA 1\\PREDA_PEC1\\FICHEROS\\ficheroPruebas.txt";
-            mochila_voraz.sonValidosDatosFichero(mochila_voraz.leerFichero(fichero));
+
+            String fichero = "poner aqui el path";
+            mochila_voraz.main(new String[] {"-t","-h",fichero});
         }catch(Exception e){
             System.out.println(e.getMessage());
+            e.printStackTrace();
         }
+
+
     }
 
     static void validarDatos(String datos){
