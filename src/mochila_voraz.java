@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.FileSystemException;
+import java.util.Locale;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,6 +24,8 @@ public class mochila_voraz {
 
     public static void main(String[] args) {
         System.out.println("\nSYSTEM: INICIO DE PROGRAMA MOCHILA_VORAZ\n\n");
+        Locale.setDefault(Locale.ENGLISH);
+
         try {
             if (args.length > 4) {
                 mostrarAyuda();
@@ -49,12 +52,8 @@ public class mochila_voraz {
 
 
 
-        }catch (IllegalArgumentException iae) {
+        } catch (Exception iae) {
             gestionarMensajeError(iae);
-            mostrarAyuda();
-
-        } catch (Exception e) {
-            gestionarMensajeError(e);
 
         }
 
@@ -65,7 +64,7 @@ public class mochila_voraz {
     }
 
     static <Excep extends Exception> void gestionarMensajeError(Excep e){
-        System.out.println(e.getMessage().startsWith("ERROR: ")?e.getMessage():"ERROR: error inesperado => "+e.getMessage());
+        System.out.println(e.getMessage().startsWith("ERROR: ")?e.getMessage()+"\n":"ERROR: error inesperado => "+e.getMessage()+"\n");
     }
 
     static boolean sonArgumentosValidos(String[] args){
@@ -149,7 +148,7 @@ public class mochila_voraz {
         System.out.println("             -t: traza cada paso de manera que se describa la aplicación del algoritmo utilizado.");
         System.out.println("             -h: muestra una ayuda y la sintaxis del comando.");
         System.out.println("fichero_entrada: es el nombre del fichero del que se leen los datos de entrada.");
-        System.out.println(" fichero_salida: es el nombre del fichero que se creará para almacenar la salida.\n\n");
+        System.out.println(" fichero_salida: es el nombre del fichero que se creará para almacenar la salida.\n");
     }
 
     static boolean esValidoArgumento(String arg){
@@ -211,7 +210,7 @@ public class mochila_voraz {
             ficheroSalida = nombre_fichero;
         }
         //Fichero válido
-        System.out.println("SYSTEM: el fichero "+(esEntrada?"de entrada":"de salida")+" se puede procesar.");
+        System.out.println("SYSTEM: el fichero "+(esEntrada?"de entrada":"de salida")+" se puede procesar.\n");
         return true;
     }
 
@@ -219,16 +218,19 @@ public class mochila_voraz {
         System.out.println("SYSTEM: inicio de la validación de los datos.");
 
         //Estructura del fichero
-        Pattern pattern = Pattern.compile("^(?:[0-9]+)\\s+(?:(?:(?:[0-9]+(?:\\.[0-9]+)?) (?:[0-9]+(?:\\.[0-9]+)?))\\s+)+(?:[0-9]+(?:\\.[0-9]+)?)$", Pattern.MULTILINE);
+        Pattern pattern = Pattern.compile("^([0-9]+)\\s+((([0-9]+(\\.[0-9]+)?) ([0-9]+(?:\\.[0-9]+)?))\\s+)+([0-9]+(\\.[0-9]+)?)$", Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(datos);
 
         if(matcher.find())
             System.out.println("SYSTEM: el fichero está correctamente estructurado.");
         else
-            throw new FileSystemException("ERROR: el fichero no está correctamente estructurado.\n"+
-            "ERROR: el número de objetos del conjunto debe estar en la primera linea del fichero y ser un número entero.\n"+
-            "ERROR: la capacidad de la mochila debe estar en la última linea del fichero.\n"+
-            "ERROR: los objetos deben indicarse a partir de la primer linea del fichero. Cada linea tendrá el peso, un espacio y el beneficio.");
+            throw new FileSystemException("""
+                    ERROR: el fichero no está correctamente estructurado.
+                    El número de objetos del conjunto debe estar en la primera linea del fichero y ser un número entero.
+                    La capacidad de la mochila debe estar en la última linea del fichero.
+                    Los objetos deben indicarse a partir de la primer linea del fichero. Cada linea tendrá el peso, un espacio y el beneficio.
+                    El separador decimal debe ser un punto.
+                    """);
 
         String[] arrayDatos = datos.split("\n");
 
@@ -256,42 +258,44 @@ public class mochila_voraz {
         else
             throw new FileSystemException("ERROR: el número de objetos no cuadra con lo indicado => num:"+arrayDatos[0]+" <> cap:"+(arrayDatos.length-2));
 
-        //Inicializar mochila
-        mochila = new Mochila(arrayDatos.length-2);
-        mochila.setCapacidad(Float.parseFloat(arrayDatos[arrayDatos.length-1]));
-
         //Comprobar validez de objetos
         pattern = Pattern.compile("^([0-9]+(?:\\.[0-9]+)?) ([0-9]+(?:\\.[0-9]+)?)$", Pattern.MULTILINE);
+        int cantidadObjetos    = arrayDatos.length-2;
+        float capacidadMochila = Float.parseFloat(arrayDatos[arrayDatos.length-1]);
+        float[] pesos          = new float[cantidadObjetos];
+        float[] beneficios     = new float[cantidadObjetos];
 
-        for(int i=1; i< arrayDatos.length-2; i++){
+        for(int i=1; i<=cantidadObjetos; i++){
             matcher = pattern.matcher(arrayDatos[i]);
             if(!matcher.find()) {
                 throw new FileSystemException("ERROR: el objeto "+(arrayDatos[i])+" no tiene el formato correcto.");
             }
             else {
-                mochila.getPesos()[i-1]      = Float.parseFloat(matcher.group(0));
-                mochila.getBeneficios()[i-1] = Float.parseFloat(matcher.group(1));
+                String[] grupo = matcher.group().split(" ");
+                pesos[i-1]      = Float.parseFloat(grupo[0]);
+                beneficios[i-1] = Float.parseFloat(grupo[1]);
             }
-
         }
 
-        System.out.println("SYSTEM: fin de validación de los datos.");
+        //Inicializar mochila
+        mochila = new Mochila(cantidadObjetos, pesos, beneficios, capacidadMochila);
+
+        System.out.println("SYSTEM: datos correctos. Fin de validación de los datos.\n");
     }
 
     static String leerFichero(String path) throws FileNotFoundException{
         //Obtenemos el fichero
         File fichero = new File(path);
 
-        String datos = "";
-
         Scanner lector = new Scanner(fichero);
+        StringBuilder datos = new StringBuilder();
 
         while(lector.hasNext())
-            datos+=lector.nextLine()+"\n";
+            datos.append(lector.nextLine()).append("\n");
 
-        System.out.println("SYSTEM: lectura de fichero de entrada => \n"+datos);
+        System.out.println("SYSTEM: lectura de fichero de entrada => \n"+datos+"\n");
 
-        return datos;
+        return datos.toString();
     }
 
     static void esEntradaPorTecladoValida() throws IOException{
@@ -300,8 +304,11 @@ public class mochila_voraz {
 
         System.out.println("\nSYSTEM: inicio entrada por teclado...");
 
-        Boolean entradaErronea = true;
-        int cantidad = 0;
+        boolean entradaErronea = true;
+        int cantidad    = 0;
+        float capacidad = 0;
+        float[] pesos;
+        float[] beneficios;
 
         //Cantidad de tipo de objetos
         while(entradaErronea) {
@@ -317,8 +324,8 @@ public class mochila_voraz {
             }
         }
 
-        //Inicializamos la mochila
-        mochila = new Mochila(cantidad);
+        pesos      = new float[cantidad];
+        beneficios = new float[cantidad];
 
         int i = 0;
 
@@ -328,11 +335,11 @@ public class mochila_voraz {
                 System.out.println(("SYSTEM: introduzca el peso del objeto ("+(i+1)+"/"+cantidad+")"));
                 float peso = entrada.nextFloat();
                 if(peso <= 0) throw new Exception("ERROR: peso menor o igual a cero.");
-                mochila.getPesos()[i] = peso;
+                pesos[i] = peso;
                 System.out.println(("SYSTEM: introduzca el beneficio del objeto ("+(i+1)+"/"+cantidad+")"));
                 float beneficio = entrada.nextFloat();
                 if(beneficio < 0) throw new Exception("ERROR: beneficio menor a cero.");
-                mochila.getBeneficios()[i] = beneficio;
+                beneficios[i] = beneficio;
                 System.out.println("SYSTEM: se ha introducido un objeto con peso "+peso+" y beneficio "+beneficio+" ("+(i+1)+"/"+cantidad+")");
                 i++;
                 entrada.nextLine();
@@ -349,30 +356,35 @@ public class mochila_voraz {
                 System.out.println("SYSTEM: introduce la capacidad de la mochila.");
                 float cap = entrada.nextFloat();
                 if(cap <= 0) throw new Exception("ERROR: no ha introducido un número entero mayor a cero.");
-                mochila.setCapacidad(cap);
+                capacidad= cap;
                 entradaErronea = false;
-                System.out.println("SYSTEM: la capacidad de la mochila es => "+mochila.getCapacidad());
+                System.out.println("SYSTEM: la capacidad de la mochila es => "+capacidad);
             } catch (Exception e) {
                 decidirSiFinalizarEjecucion(entrada, e);
             }
         }
 
+        //Inicializamos la mochila
+        mochila = new Mochila(cantidad, pesos, beneficios, capacidad);
+
+
         System.out.println("SYSTEM: los datos de la mochila son => ");
-        System.out.println("objetos: "+mochila.getPesos().length);
-        for (int e=0; e<mochila.getPesos().length; e++)
+        System.out.println("objetos: "+mochila.getCantidadObjetos());
+        for (int e=0; e<mochila.getCantidadObjetos(); e++)
             System.out.println("peso: "+mochila.getPesos()[e]+" beneficio: "+mochila.getBeneficios()[e]);
         System.out.println("capacidad: "+mochila.getCapacidad());
 
+        System.out.println("SYSTEM: fin de entrada por teclado.\n");
     }
 
     static void decidirSiFinalizarEjecucion(Scanner entrada, Exception e) throws IOException {
         entrada.nextLine();
-        System.out.println((e.getMessage() == null || e.getMessage().contains("null"))?"ERROR: no ha introducido un número. Para introducir un decimal use la coma.":e.getMessage());
+        System.out.println((e.getMessage() == null || e.getMessage().contains("null"))?"ERROR: no ha introducido un número. Para introducir un decimal use el punto.":e.getMessage()+"\n");
         System.out.println("SYSTEM: si desea finalizar el programa escriba SI.");
         String opcion = entrada.nextLine();
         if(opcion.equalsIgnoreCase("SI")){
             entrada.close();
-            throw new IOException("ERROR: se ha interrumpido la entrada de datos, se finaliza la ejecución del programa.");
+            throw new IOException("ERROR: se ha interrumpido la entrada de datos, se finaliza la ejecución del programa.\n");
         }
         entrada.nextLine();
     }
@@ -381,15 +393,16 @@ public class mochila_voraz {
 
 class Mochila {
 
-    private int cantidadObjetos;
-    private float[] pesos;
-    private float[] beneficios;
-    private float capacidad;
+    private final int cantidadObjetos;
+    private final float[] pesos;
+    private final float[] beneficios;
+    private final float capacidad;
 
-    public Mochila(int cantidad_de_objetos){
+    public Mochila(int cantidad_de_objetos, float[] pesos_de_objetos, float[] beneficios_de_objetos, float capacidad_de_mochila) {
         this.cantidadObjetos = cantidad_de_objetos;
-        this.pesos = new float[cantidad_de_objetos];
-        this.beneficios = new float[cantidad_de_objetos];
+        this.pesos = pesos_de_objetos;
+        this.beneficios = beneficios_de_objetos;
+        this.capacidad = capacidad_de_mochila;
     }
 
     public float[] getPesos(){
@@ -398,10 +411,6 @@ class Mochila {
 
     public float[] getBeneficios(){
         return this.beneficios;
-    }
-
-    public void setCapacidad(float volumen_mochila){
-        this.capacidad = volumen_mochila;
     }
 
     public float getCapacidad(){
