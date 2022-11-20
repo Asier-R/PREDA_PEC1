@@ -45,90 +45,22 @@ public class MainPruebas {
         //float p = Float.parseFloat("8.2");
         //System.out.println(p);
 
-        try {
+        /*try {
             String fichero = "C:\\Users\\izask\\Desktop\\UNED\\Asignaturas\\2022-2023\\Programacion y Estructuras de Datos Avanzadas\\PRACTICA 1\\PREDA_PEC1\\FICHEROS\\ficheroPruebas.txt";
             mochila_voraz.main(new String[] {"-t","-h",fichero});
         }catch(Exception e){
             System.out.println(e.getMessage());
             e.printStackTrace();
-        }
+        }*/
+
+        int i = 3;
+        System.out.println(i/2);
+        i = 1;
+        System.out.println(i/2);
+        i = 0;
+        System.out.println(i/2);
 
 
-    }
-
-    static void validarDatos(String datos){
-        System.out.println("SYSTEM: inicio de la validación de los datos.");
-        String[] arrayDatos = datos.split("\n");
-
-        //Número de objetos
-        String regex = "^[0-9]+$";
-        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        Matcher matcher = pattern.matcher(arrayDatos[0]);
-
-        if(matcher.find())
-            System.out.println("SYSTEM: el número de objetos es "+arrayDatos[0]+".");
-        else
-            System.out.println("ERROR: no se ha introducido el número de objetos.");
-
-        //Capacidad de la mochila
-        regex = "^[0-9]+$";
-        pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        matcher = pattern.matcher(arrayDatos[arrayDatos.length-1]);
-
-        if(matcher.find())
-            System.out.println("SYSTEM: la capacidad de la mochila es "+arrayDatos[arrayDatos.length-1]+".");
-        else
-            System.out.println("ERROR: no se ha introducido la capacidad de la mochila.");
-
-        //El número de objetos coincide con lo indicado en la primera línea
-        if(arrayDatos.length-2 == Integer.parseInt(arrayDatos[0]))
-            System.out.println("SYSTEM: el número de objetos es coherente con lo indicado.");
-        else
-            System.out.println("ERROR: el número de objetos no cuadra con lo indicado.");
-
-        //Comprobar validez de objetos
-        regex = "^[0-9]+ +[0-9]+$";
-        pattern = Pattern.compile(regex, Pattern.MULTILINE);
-        matcher = pattern.matcher(arrayDatos[arrayDatos.length-1]);
-
-        for(int i=1; i< arrayDatos.length-2; i++){
-            matcher = pattern.matcher(arrayDatos[i]);
-            if(!matcher.find())
-                System.out.println("ERROR: uno de los objetos no tiene el formato correcto.");
-        }
-
-        System.out.println("SYSTEM: fin de validación de los datos.");
-    }
-
-    static String leerFichero(File fichero){
-        String datos = "";
-        try {
-            Scanner lector = new Scanner(fichero);
-
-            while(lector.hasNext())
-                datos+=lector.nextLine()+"\n";
-
-            System.out.println("LECTURA: \n"+datos);
-
-        } catch (FileNotFoundException e) {
-            System.out.println("An error occurred.");
-            e.printStackTrace();
-        }
-
-        return datos;
-    }
-
-    static void pruebas_de_ficheros(File fichero){
-
-        System.out.println("Path => "+fichero.getPath());
-        System.out.println("Existe fichero => "+fichero.exists());
-        System.out.println("Es fichero => "+fichero.isFile());
-
-        System.out.println("File name: " + fichero.getName());
-        System.out.println("Absolute path: " + fichero.getAbsolutePath());
-        System.out.println("Writeable: " + fichero.canWrite());
-        System.out.println("Readable " + fichero.canRead());
-        System.out.println("File size in bytes " + fichero.length());
     }
 
 }
