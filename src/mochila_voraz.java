@@ -15,9 +15,9 @@ import java.util.regex.Pattern;
  */
 public class mochila_voraz {
 
-    static boolean existeFicheroEntrada = false; //Se modifica en validarFichero
+    static boolean existeFicheroEntrada = false;
     static String ficheroEntrada = "";
-    static boolean existeFicheroSalida = false; //Se modifica en validarFichero
+    static boolean existeFicheroSalida = false;
     static String ficheroSalida = "";
     static boolean trazasActivas = false;
     static Mochila mochila;
@@ -27,11 +27,11 @@ public class mochila_voraz {
         Locale.setDefault(Locale.ENGLISH);
 
         try {
+            //Validaciones de argumentos de entrada
             if (args.length > 4) {
                 mostrarAyuda();
                 throw new IllegalArgumentException("ERROR: ha introducido " + (args.length - 4) + " argumentos más de los permitidos.");
             }
-
             if (args.length > 0) {
                 if (!sonArgumentosValidos(args)) throw new IllegalArgumentException("ERROR: argumentos de entrada no válidos.");
             }
@@ -41,6 +41,7 @@ public class mochila_voraz {
             if (!existeFicheroSalida)
                 System.out.println("SYSTEM: No se ha especificado fichero de salida...se creará un fichero con nombre salida_mochila_voraz.txt.");
 
+            //Validaciones de datos de mochila
             if (existeFicheroEntrada) {
                 //Lectura y validación de la entrada
                 sonValidosDatosFichero(leerFichero(ficheroEntrada));
@@ -49,6 +50,13 @@ public class mochila_voraz {
                 esEntradaPorTecladoValida();
             }
 
+            //Inicialización de montículo
+
+
+            //Selección de objetos
+
+
+            //Salida de datos
 
 
 
@@ -258,12 +266,14 @@ public class mochila_voraz {
         else
             throw new FileSystemException("ERROR: el número de objetos no cuadra con lo indicado => num:"+arrayDatos[0]+" <> cap:"+(arrayDatos.length-2));
 
-        //Comprobar validez de objetos
-        pattern = Pattern.compile("^([0-9]+(?:\\.[0-9]+)?) ([0-9]+(?:\\.[0-9]+)?)$", Pattern.MULTILINE);
+        //Datos mochila
         int cantidadObjetos    = arrayDatos.length-2;
         float capacidadMochila = Float.parseFloat(arrayDatos[arrayDatos.length-1]);
         float[] pesos          = new float[cantidadObjetos];
         float[] beneficios     = new float[cantidadObjetos];
+
+        //Comprobar validez de objetos
+        pattern = Pattern.compile("^([0-9]+(?:\\.[0-9]+)?) ([0-9]+(?:\\.[0-9]+)?)$", Pattern.MULTILINE);
 
         for(int i=1; i<=cantidadObjetos; i++){
             matcher = pattern.matcher(arrayDatos[i]);
@@ -387,6 +397,10 @@ public class mochila_voraz {
             throw new IOException("ERROR: se ha interrumpido la entrada de datos, se finaliza la ejecución del programa.\n");
         }
         entrada.nextLine();
+    }
+
+    static void trazar(String traza){
+        if(trazasActivas) System.out.println("TRAZA: "+traza);
     }
 
 }
