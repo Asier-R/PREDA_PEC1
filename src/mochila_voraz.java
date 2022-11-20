@@ -66,7 +66,7 @@ public class mochila_voraz {
         }
 
 
-        System.out.println("SYSTEM: FIN DE PROGRAMA MOCHILA_VORAZ\n");
+        System.out.println("\nSYSTEM: FIN DE PROGRAMA MOCHILA_VORAZ\n");
 
 
     }
