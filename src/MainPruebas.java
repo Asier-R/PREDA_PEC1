@@ -53,14 +53,14 @@ public class MainPruebas {
             e.printStackTrace();
         }*/
 
-        int i = 3;
-        System.out.println(i/2);
-        i = 1;
-        System.out.println(i/2);
-        i = 0;
-        System.out.println(i/2);
-
-
+        Integer aa = 1;
+        Integer bb = 2;
+        Integer cc = null;
+        //compareTO => negativo: menor    cero: igual    positivo: mayor
+        boolean buu = aa.compareTo(bb)>0;
+        System.out.println("aa > bb: "+buu);
+        buu = aa.compareTo(cc)>0;
+        System.out.println("aa > bb: "+buu);
     }
 
 }
