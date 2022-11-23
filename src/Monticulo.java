@@ -19,9 +19,14 @@ public class Monticulo <Objeto extends Comparable<Objeto>>{
     public Monticulo (Objeto[] vector){
         if(vector.length < 1 ) throw new IllegalArgumentException("ERROR: el tamaño del montículo no puede ser menor a 1.");
         //Crea el montículo
-        this.vector = crearMonticuloVacio(vector.length-1);
-        for(int i=(vector.length/2); i<=0;i--)
-            this.vector = hundir(this.vector, i);
+        this.vector = creaMonticuloLineal(vector);
+    }
+
+    /*
+    * Devuelve el monticulo generado en el constructor
+    */
+    public Objeto[] getMonticulo(){
+        return this.vector;
     }
 
     /*
@@ -35,10 +40,10 @@ public class Monticulo <Objeto extends Comparable<Objeto>>{
      * Devuelve true si el montículo está vacío.
      * El montículo está vacío si tiene un tamaño de 0 o no tiene elementos
      */
-    public boolean elMonticuloEstaVacio(){
-        if(this.vector.length == 0) return true;
+    public boolean elMonticuloEstaVacio(Objeto[] monticulo){
+        if(monticulo.length == 0) return true;
 
-        for(int i=0; i<this.vector.length; i++) if(this.vector[i] != null) return false;
+        for(int i=0; i<monticulo.length; i++) if(monticulo[i] != null) return false;
 
         return true;
     }
@@ -49,7 +54,7 @@ public class Monticulo <Objeto extends Comparable<Objeto>>{
      * Se utiliza para la inserción de un elemento nuevo en el montículo.
      */
     public Objeto[] flotar(Objeto[] monticulo, int elemento){
-        Objeto[] mont = (Objeto[]) new Comparable[monticulo.length-1];
+        Objeto[] mont = crearMonticuloVacio(monticulo.length-1);
         int hijo  = elemento;
         int padre = elemento/2;
         //compareTO => negativo: menor    cero: igual    positivo: mayor
@@ -67,7 +72,7 @@ public class Monticulo <Objeto extends Comparable<Objeto>>{
      * En tal caso, intercambia su valor por el del mayor de sus hijos.
      */
     public Objeto[] hundir(Objeto[] monticulo, int elemento){
-        Objeto[] mont = (Objeto[]) new Comparable[monticulo.length-1];
+        Objeto[] mont = crearMonticuloVacio(monticulo.length-1);
         boolean continuar = true;
         int hijoIZQ;
         int hijoDRC;
@@ -94,7 +99,7 @@ public class Monticulo <Objeto extends Comparable<Objeto>>{
     }
 
     private Objeto[] intercambiar(int a, int b, Objeto[] monticulo){
-        Objeto[] mont = (Objeto[]) new Comparable[monticulo.length-1];
+        Objeto[] mont = crearMonticuloVacio(monticulo.length-1);
         Objeto temp = mont[a];
         mont[a] = mont[b];
         mont[b] = temp;
@@ -106,7 +111,7 @@ public class Monticulo <Objeto extends Comparable<Objeto>>{
      * Devuelve un montículo de n+1 elementos.
      */
     public Objeto[] insertar(Objeto objeto, Objeto[] monticulo){
-        Objeto[] vTemp = (Objeto[]) new Comparable[monticulo.length+1];
+        Objeto[] vTemp = crearMonticuloVacio(monticulo.length);
         for(int i=0; i<monticulo.length; i++)
             vTemp[i] = monticulo[i];
         vTemp[vTemp.length-1] = objeto;
@@ -128,7 +133,7 @@ public class Monticulo <Objeto extends Comparable<Objeto>>{
         //Se elimina cima, se pone el último elemento en cabeza y se recompone montículo con hundir.
         this.vector[0] = this.vector[this.vector.length-1];
         //Se crea array nuevo para reducir el tamaño del montículo y se pasan todos los elementos menos el último.
-        Objeto[] vTemp = (Objeto[]) new Comparable[this.vector.length-1];
+        Objeto[] vTemp = crearMonticuloVacio(this.vector.length-1);
         for(int i=0; i<this.vector.length-1; i++)
             vTemp[i] = this.vector[i];
         //Recomponer montículo mediante hundir.
@@ -136,9 +141,12 @@ public class Monticulo <Objeto extends Comparable<Objeto>>{
         return cima;
     }
 
-    public Objeto[] creaMonticuloLinea(){
+    public Objeto[] creaMonticuloLineal(Objeto[] vector){
+        Objeto[] monticulo = crearMonticuloVacio(this.vector.length-1);
+        for(int i=(vector.length/2); i<=0;i--)
+            monticulo = hundir(monticulo, i);
 
-        return null;
+        return monticulo;
     }
 
 }
