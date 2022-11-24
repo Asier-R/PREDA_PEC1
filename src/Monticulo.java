@@ -1,22 +1,26 @@
+import javax.management.ObjectInstance;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-public class Monticulo <Objeto extends Comparable<Objeto>>{
+@SuppressWarnings("unchecked")
+public class Monticulo <T extends Comparable>{
 
-    private Objeto[] vector;
+    private T clase;//Se utiliza para instanciar array con genéricos.
+    private T[] vector;
 
     /*
      * Si no se dispone de un array se inicializa la clase y el montículo vacío.
      */
-    public Monticulo(int tamano){
-        if(tamano < 1) throw new IllegalArgumentException("ERROR: el tamaño del montículo no puede ser menor a 1.");
-        this.vector = crearMonticuloVacio(tamano);
+    public Monticulo(T clase){
+        this.clase = clase;
+        this.vector = crearMonticuloVacio();
     }
 
     /*
      * Transforma el array de entrada en un montículo.
      * El tamaño máximo no puede ser menor al del array de entrada.
      */
-    public Monticulo (Objeto[] vector){
+    public Monticulo (Class<T> clase, T[] vector){
         if(vector.length < 1 ) throw new IllegalArgumentException("ERROR: el tamaño del montículo no puede ser menor a 1.");
         //Crea el montículo
         this.vector = creaMonticuloLineal(vector);
@@ -25,22 +29,26 @@ public class Monticulo <Objeto extends Comparable<Objeto>>{
     /*
     * Devuelve el monticulo generado en el constructor
     */
-    public Objeto[] getMonticulo(){
+    public T[] getMonticulo(){
         return this.vector;
     }
 
     /*
-     * Devuelve un montículo vacio.
+     * Devuelve un montículo vacío.
+     * Si no se indica tamaño, se creará de tamaño 1. Utilizar insertar para añadir nuevos elementos.
      */
-    public Objeto[] crearMonticuloVacio(int tamano){
-        return (Objeto[]) new Comparable[tamano];
+    public T[] crearMonticuloVacio(){
+        return (T[]) Array.newInstance(clase.getClass(),1);
+    }
+    public T[] crearMonticuloVacio(int tamano){
+        return (T[]) Array.newInstance(clase.getClass(),tamano);
     }
 
     /*
      * Devuelve true si el montículo está vacío.
      * El montículo está vacío si tiene un tamaño de 0 o no tiene elementos
      */
-    public boolean elMonticuloEstaVacio(Objeto[] monticulo){
+    public boolean elMonticuloEstaVacio(T[] monticulo){
         if(monticulo.length == 0) return true;
 
         for(int i=0; i<monticulo.length; i++) if(monticulo[i] != null) return false;
@@ -53,27 +61,24 @@ public class Monticulo <Objeto extends Comparable<Objeto>>{
      * situado en el montículo y se haya restablecido la propiedad de montículo.
      * Se utiliza para la inserción de un elemento nuevo en el montículo.
      */
-    public Objeto[] flotar(Objeto[] monticulo, int elemento){
-        Objeto[] mont = crearMonticuloVacio(monticulo.length-1);
+    public void flotar(T[] monticulo, int elemento){
         int hijo  = elemento;
         int padre = elemento/2;
         //compareTO => negativo: menor    cero: igual    positivo: mayor
-        while(hijo>1 && mont[padre].compareTo(mont[hijo])<0){
-            Objeto tempPadre = mont[padre];
-            mont[padre] = mont[hijo]; //Intercambiar posición padre<->hijo
-            mont[hijo] = tempPadre;
+        while(hijo>0 && monticulo[padre].compareTo(monticulo[hijo])<0){
+            T tempPadre = monticulo[padre];
+            monticulo[padre] = monticulo[hijo]; //Intercambiar posición padre<->hijo
+            monticulo[hijo]  = tempPadre;
             hijo = padre;
+            padre = hijo/2;
         }
-        return mont;
     }
 
     /*
      * Reubica el elemento i del vector en caso de que ést sea menor que alguno de sus hijos.
      * En tal caso, intercambia su valor por el del mayor de sus hijos.
      */
-    public Objeto[] hundir(Objeto[] monticulo, int elemento){
-        Objeto[] mont = crearMonticuloVacio(monticulo.length-1);
-        boolean continuar = true;
+    public void hundir(T[] monticulo, int elemento){
         int hijoIZQ;
         int hijoDRC;
         int padre = -1;
@@ -85,68 +90,75 @@ public class Monticulo <Objeto extends Comparable<Objeto>>{
             padre = i;
 
             //compareTO => negativo: menor    cero: igual    positivo: mayor
-            if ((hijoDRC < mont.length) && (mont[hijoDRC].compareTo(monticulo[i]) > 0))
+            if ((hijoDRC < monticulo.length) && (monticulo[hijoDRC].compareTo(monticulo[i]) > 0))
                 i = hijoDRC;
 
-            if ((hijoIZQ < mont.length) && (mont[hijoIZQ].compareTo(monticulo[i]) > 0))
+            if ((hijoIZQ < monticulo.length) && (monticulo[hijoIZQ].compareTo(monticulo[i]) > 0))
                 i = hijoIZQ;
 
-            mont = intercambiar(padre, i, mont);
-            //if(padre == i) continuar = false;
+            intercambiar(padre, i, monticulo);
         }
 
-        return mont;
     }
 
-    private Objeto[] intercambiar(int a, int b, Objeto[] monticulo){
-        Objeto[] mont = crearMonticuloVacio(monticulo.length-1);
-        Objeto temp = mont[a];
-        mont[a] = mont[b];
-        mont[b] = temp;
-        return mont;
+    private void intercambiar(int a, int b, T[] monticulo){
+        T temp = monticulo[a];
+        monticulo[a] = monticulo[b];
+        monticulo[b] = temp;
     }
 
     /*
      * Inserta un elemento en el montículo y lo flota hasta restaurar la propiedad de montículo.
      * Devuelve un montículo de n+1 elementos.
      */
-    public Objeto[] insertar(Objeto objeto, Objeto[] monticulo){
-        Objeto[] vTemp = crearMonticuloVacio(monticulo.length);
-        for(int i=0; i<monticulo.length; i++)
-            vTemp[i] = monticulo[i];
-        vTemp[vTemp.length-1] = objeto;
-        return flotar(vTemp, vTemp.length-1);
+    public T[] insertar(T T, T[] monticulo){
+        T[] vTemp = crearMonticuloVacio(monticulo.length+1);
+        System.arraycopy(monticulo,0,vTemp,0,monticulo.length); //Coste temporal: O(n)
+        vTemp[vTemp.length-1] = T;
+        flotar(vTemp, vTemp.length-1);
+        monticulo = vTemp;
+        return monticulo;
     }
 
     /*
      * Devuelve la cima del montículo sin modificarlo.
      */
-    public Objeto mostrarCima(){
-        return this.vector[0];
+    public T mostrarCima(T[] monticulo){
+        return monticulo[0];
     }
 
     /*
      * Devuelve la cima del montículo, la elimina y recompone la propiedad de montículo.
      */
-    public Objeto obtenerCima(){
-        Objeto cima = mostrarCima();
+    public T obtenerCima(T[] monticulo){
+        T cima = mostrarCima(monticulo); //Guardamos la cima
         //Se elimina cima, se pone el último elemento en cabeza y se recompone montículo con hundir.
-        this.vector[0] = this.vector[this.vector.length-1];
-        //Se crea array nuevo para reducir el tamaño del montículo y se pasan todos los elementos menos el último.
-        Objeto[] vTemp = crearMonticuloVacio(this.vector.length-1);
-        for(int i=0; i<this.vector.length-1; i++)
-            vTemp[i] = this.vector[i];
+        T[] vTemp = crearMonticuloVacio(monticulo.length-2);//Array de n-1 posiciones, coste temporal: O(n)
+        monticulo[0] = monticulo[monticulo.length-1];
+        System.arraycopy(monticulo,0,vTemp,0,monticulo.length-1);
         //Recomponer montículo mediante hundir.
-        this.vector =hundir(vTemp,0);
+        hundir(monticulo,0);
         return cima;
     }
 
-    public Objeto[] creaMonticuloLineal(Objeto[] vector){
-        Objeto[] monticulo = crearMonticuloVacio(this.vector.length-1);
+    /*
+     * Devuelve un montículo.
+     */
+    public T[] creaMonticuloLineal(T[] vector){
+        T[] monticulo = crearMonticuloVacio(vector.length-1);
         for(int i=(vector.length/2); i<=0;i--)
-            monticulo = hundir(monticulo, i);
+            hundir(vector, i);
 
         return monticulo;
     }
 
+    /*
+     * Recibe un montículo y devuelve un vector con los elementos del montículo ordenados de mayor a menor.
+     */
+    public T[] heapShort(T[] monticulo){
+
+
+
+        return null;
+    }
 }

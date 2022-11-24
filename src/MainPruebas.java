@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,7 +54,7 @@ public class MainPruebas {
             e.printStackTrace();
         }*/
 
-        Integer aa = 1;
+        /*Integer aa = 1;
         Integer bb = 2;
         Integer cc = null;
         //compareTO => negativo: menor    cero: igual    positivo: mayor
@@ -61,6 +62,30 @@ public class MainPruebas {
         System.out.println("aa > bb: "+buu);
         buu = aa.compareTo(cc)>0;
         System.out.println("aa > bb: "+buu);
+
+        String[] bobo = new String[0];
+        System.out.println(bobo.length);
+        System.out.println(bobo[0]);
+        */
+
+        /*
+        Integer[] bbb = new Integer[]{2,3,4,5};
+        Integer[] ccc = new Integer[10];
+        System.arraycopy(bbb,0,ccc,1,bbb.length);
+        System.out.println();
+        */
+
+        Integer[] bbb = new Integer[]{2,3,4,5};
+        Integer[] ccc;
+        Integer[] ddd;
+        Integer a = 0;
+
+        Monticulo<Integer> monte = new Monticulo<Integer>(a);
+        ccc = monte.insertar(15,bbb);
+        ddd = monte.insertar(7,ccc);
+        System.out.println(Arrays.toString(ddd));
+
+
     }
 
 }
