@@ -92,7 +92,7 @@ public class MainPruebas {
         monte.mostrarCima(ddd);
         System.out.println(monte.mostrarCima(ddd));*/
 
-        bbb = new Integer[]{2,3,4,5};
+        bbb = new Integer[]{null, 2,3,4,5};
         //bbb = new Integer[]{4,6,4,5,1,3,2};
         //monte.hundir(bbb,0);
         //System.out.println(Arrays.toString(bbb));
@@ -100,9 +100,15 @@ public class MainPruebas {
         // System.out.println(Arrays.toString(bbb));
         // monte.hundir(bbb,0);
         //System.out.println(Arrays.toString(bbb));
-        System.out.println("INI "+Arrays.toString(bbb));
-        monte.creaMonticuloLineal(bbb);
-        System.out.println("FIN  "+Arrays.toString(bbb));
+        //System.out.println("INI "+Arrays.toString(bbb));
+        //monte.creaMonticuloLineal(bbb);
+        //System.out.println("FIN  "+Arrays.toString(bbb));
+        //monte.obtenerCima(bbb);
+        //System.out.println(Arrays.toString(bbb));
+
+        monte.heapShort(bbb);
+        System.out.println(Arrays.toString(bbb));
+
 
 
     }

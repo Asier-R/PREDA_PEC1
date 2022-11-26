@@ -4,7 +4,7 @@ import java.lang.reflect.Array;
  * @author Asier Rodríguez
  * @version 1.0
  */
-public class Monticulo <T extends Comparable>{
+public class Monticulo <T extends Comparable<T>>{
 
     /**
      * Variable auxiliar utilizada para poder instanciar un array utilizando genéricos.
@@ -107,12 +107,12 @@ public class Monticulo <T extends Comparable>{
     }
 
     /**
-     * Reubica el elemento i del vector en caso de que ést sea menor que alguno de sus hijos.
-     * Complejidad temporal lineal O(n/2). El caso peor es aquel en el que el primer elemento acaba en el último nivel
-     * del montículo. Cada iteración del bucle corresponde a un nivel del montículo y cada nivel tiene solo dos
-     * elementos. Ambos elementos se exploran en la misma iteración, por lo que el bucle será de tamaño n/2, donde n es
-     * la cantidad de elementos en el montículo.
-     * En tal caso, intercambia su valor por el del mayor de sus hijos.
+     * Reubica el elemento i (intercambia su valor por el del mayor de sus hijos) del vector en caso de que este sea
+     * menor que alguno de sus hijos.
+     * Complejidad temporal logarítmico O(log(n)). El caso peor es aquel en el que el primer elemento acaba en el último
+     * nivel del montículo. Cada iteración del bucle corresponde a un nivel del montículo y cada nivel tiene solo dos
+     * elementos. Ambos elementos se exploran en la misma iteración, por lo que el bucle será de tamaño log2(2^n),
+     * donde n es la cantidad de elementos en el montículo.
      * @param monticulo montículo sobre el que se realizará la acción hundir.
      * @param elemento posición en el montículo del elemento sobre el que se realizará la acción hundir.
      */
@@ -128,15 +128,16 @@ public class Monticulo <T extends Comparable>{
             padre = i;
 
             //compareTO => negativo: menor    cero: igual    positivo: mayor
-            if ((hijoDRC < monticulo.length) && (monticulo[hijoDRC].compareTo(monticulo[i]) > 0))
-                i = hijoDRC;
+            if ((hijoDRC < monticulo.length) )
+                if(monticulo[hijoDRC] != null)
+                    if((monticulo[i] == null) || (monticulo[hijoDRC].compareTo(monticulo[i]) > 0)) i = hijoDRC;
 
-            if ((hijoIZQ < monticulo.length) && (monticulo[hijoIZQ].compareTo(monticulo[i]) > 0))
-                i = hijoIZQ;
+            if ((hijoIZQ < monticulo.length))
+                if(monticulo[hijoIZQ] != null)
+                    if((monticulo[i] == null) || (monticulo[hijoIZQ].compareTo(monticulo[i]) > 0)) i = hijoIZQ;
 
             intercambiar(padre, i, monticulo);
         }
-
     }
 
     /**
@@ -158,9 +159,11 @@ public class Monticulo <T extends Comparable>{
      * algoritmo de flotar y hundir. Aunque esto implica que siempre que se inserta un elemento se hace en un tiempo O(n).
      * @param elemento elemento a insertar en montículo.
      * @param monticulo montículo sobre el que se realiza la acción insertar.
+     * @throws IllegalArgumentException si el elemento a insertar es nulo.
      * @return montículo de tamaño n+1 con el elemento nuevo.
      */
     public T[] insertar(T elemento, T[] monticulo){
+        if(elemento == null) throw new IllegalArgumentException("ERROR: no se puede insertar un elemento nulo.");
         T[] vTemp = crearMonticuloVacio(monticulo.length+1);
         System.arraycopy(monticulo,0,vTemp,0,monticulo.length); //Complejidad temporal: O(n)
         vTemp[vTemp.length-1] = elemento;
@@ -181,18 +184,16 @@ public class Monticulo <T extends Comparable>{
 
     /**
      * Devuelve la cima del montículo, la elimina y recompone la propiedad de montículo.
-     * Complejidad temporal O(n). Es necesario volver a copiar entero el montículo.
+     * Complejidad temporal O(log(n)).
      * @param monticulo montículo sobre el que se realizará la acción obtenerCima.
      * @return cima del montículo.
      */
     public T obtenerCima(T[] monticulo){
-        T cima = mostrarCima(monticulo); //Guardamos la cima
+        T cima = mostrarCima(monticulo); //Guardamos la cima O(1)
         //Se elimina cima, se pone el último elemento en cabeza y se recompone montículo con hundir.
-        T[] vTemp = crearMonticuloVacio(monticulo.length-2);//Array de n-1 posiciones, Complejidad temporal: O(n)
         monticulo[0] = monticulo[monticulo.length-1];
-        System.arraycopy(monticulo,0,vTemp,0,monticulo.length-1); //Complejidad temporal: O(n)
-        //Recomponer montículo mediante hundir.
-        hundir(monticulo,0);
+        monticulo[monticulo.length-1] = null;
+        hundir(monticulo,0); // O(log(n))
         return cima;
     }
 
@@ -207,22 +208,22 @@ public class Monticulo <T extends Comparable>{
     }
 
     /**
-     * Recibe un vector y lo devuelve un montículo con los elementos ordenados de mayor a menor.
+     * Recibe un vector y lo devuelve con los elementos ordenados de mayor a menor.
+     * Complejidad temporal O(n*log(n)).
      * @param vector vector sobre el que se realizará la acción heapShort.
-     * @return montículo ordenado de mayor a menor.
+     * @return vector ordenado de mayor a menor.
      */
-    public T[] heapShort(T[] vector){
-        /*T cima;
-        T[] vec = creaMonticuloLineal(vector);
-        T[] mont  = crearMonticuloVacio();
+    public void heapShort(T[] vector){
+        if(vector.length < 1 ) throw new IllegalArgumentException("ERROR: el tamaño del vector no puede ser menor a 1.");
+        T cima;
+        T[] clon = vector.clone(); // O(1)
+        creaMonticuloLineal(clon); // O(n)
 
-        for(int i=0; i<vec.length; i++){
-            cima = obtenerCima(vec);
-            insertar(cima, mont);
+        for(int i=0; i<vector.length; i++){ // Bucle O(n) + obtenerCima O(log(n)) = O(n*log(n))
+            cima = obtenerCima(clon); // O(log(n))
+            vector[i] = cima;
         }
 
-        return mont;
-        */
-        return null;
+        //return vector;
     }
 }
