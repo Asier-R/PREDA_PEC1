@@ -81,17 +81,29 @@ public class MainPruebas {
         Integer a = 0;
 
         Monticulo<Integer> monte = new Monticulo(a);
+        /*System.out.println("INI  "+Arrays.toString(bbb));
         monte.flotar(bbb,3);
-        System.out.println(Arrays.toString(bbb));
+        System.out.println("Flotar 3: "+Arrays.toString(bbb));
         ccc = monte.insertar(15,bbb);
-        ddd = monte.insertar(7,ccc);
-        System.out.println(Arrays.toString(ddd));
+        System.out.println("Insertar 15: "+Arrays.toString(ccc));
+        ddd = monte.insertar(1,ccc);
+        System.out.println("Insertar 1: "+Arrays.toString(ddd));
+        System.out.println("FIN  "+Arrays.toString(ddd));
         monte.mostrarCima(ddd);
-        System.out.println(monte.mostrarCima(ddd));
+        System.out.println(monte.mostrarCima(ddd));*/
 
         bbb = new Integer[]{2,3,4,5};
+        //bbb = new Integer[]{4,6,4,5,1,3,2};
+        //monte.hundir(bbb,0);
+        //System.out.println(Arrays.toString(bbb));
+        // monte.hundir(bbb,0);
+        // System.out.println(Arrays.toString(bbb));
+        // monte.hundir(bbb,0);
+        //System.out.println(Arrays.toString(bbb));
+        System.out.println("INI "+Arrays.toString(bbb));
+        monte.creaMonticuloLineal(bbb);
+        System.out.println("FIN  "+Arrays.toString(bbb));
 
-        //monte.creaMonticuloLineal(bbb);
 
     }
 
