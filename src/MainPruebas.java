@@ -80,11 +80,18 @@ public class MainPruebas {
         Integer[] ddd;
         Integer a = 0;
 
-        Monticulo<Integer> monte = new Monticulo<Integer>(a);
+        Monticulo<Integer> monte = new Monticulo(a);
+        monte.flotar(bbb,3);
+        System.out.println(Arrays.toString(bbb));
         ccc = monte.insertar(15,bbb);
         ddd = monte.insertar(7,ccc);
         System.out.println(Arrays.toString(ddd));
+        monte.mostrarCima(ddd);
+        System.out.println(monte.mostrarCima(ddd));
 
+        bbb = new Integer[]{2,3,4,5};
+
+        //monte.creaMonticuloLineal(bbb);
 
     }
 
