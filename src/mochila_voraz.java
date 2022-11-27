@@ -52,10 +52,8 @@ public class mochila_voraz {
                 esEntradaPorTecladoValida();
             }
 
-            //Inicialización de montículo
-            Monticulo<Mochila.PesoBeneficio> monticulo = new Monticulo<>(mochila.getPesosBeneficios()[0]);
-            //System.out.println(Arrays.toString(mochila.getPesosBeneficios()));
-            //monticulo.heapShort(mochila.getPesosBeneficios());
+            //Se resuelve el problema de la mochila con objetos fraccionable
+            Mochila.ResultadoMochila[] resultado = mochila.mochilaObjetosFraccionables(mochila);
 
             //Selección de objetos
 
@@ -403,7 +401,7 @@ public class mochila_voraz {
     }
 
     static void trazar(String traza){
-        if(trazasActivas) System.out.println("TRAZA: "+traza);
+        if(trazasActivas) System.out.println("TRAZA: "+traza+".");
     }
 
 }
@@ -418,11 +416,74 @@ class Mochila {
         this.cantidadObjetos = cantidad_de_objetos;
         this.capacidad       = capacidad_de_mochila;
 
-        this.pesosBeneficios = new PesoBeneficio[pesos_de_objetos.length];
+        this.pesosBeneficios = new PesoBeneficio[cantidad_de_objetos];
 
         for(int i=0; i<pesos_de_objetos.length; i++)
             this.pesosBeneficios[i] = new PesoBeneficio(pesos_de_objetos[i], beneficios_de_objetos[i]);
 
+    }
+
+    public ResultadoMochila[] mochilaObjetosFraccionables(Mochila mochila){
+
+            mochila_voraz.trazar("inicio del algoritmo");
+
+            PesoBeneficio[] mchPB = mochila.getPesosBeneficios();
+            PesoBeneficio pb;
+            int contador    = 0;
+            float peso      = 0;
+            float capacidad = mochila.getCapacidad();
+
+            ResultadoMochila[] res = new ResultadoMochila[this.cantidadObjetos];
+
+            // Se inicia montículo con una referencia al tipo de datos.
+            mochila_voraz.trazar("se inicia montículo");
+            Monticulo<Mochila.PesoBeneficio> mont = new Monticulo(mchPB[0]);
+
+            // Se ordenan los objetos en orden decreciente
+            mochila_voraz.trazar("se ordenan los objetos introducidos por "+(mochila_voraz.existeFicheroSalida?"fichero":"teclado"));
+            mont.heapShort(mchPB);
+
+            // Se inicia a ceros el resultado
+            mochila_voraz.trazar("se inicia a ceros el resultado");
+            for(int i=0; i<res.length; i++)
+                res[i] = new ResultadoMochila(0,0,0);
+
+            // Bucle principal
+            mochila_voraz.trazar("inicio de bucle principal");
+            while(peso < capacidad){
+                pb = mont.obtenerCima(mchPB);
+                mochila_voraz.trazar("iteración "+contador+" -> se obtiene de la cima del montículo el objeto de peso => "+pb.peso);
+                if( (peso + pb.peso) < capacidad ){
+                    mochila_voraz.trazar("máximo de capacidad no alcanzado, objeto no fraccionado");
+                    res[contador] = new ResultadoMochila(pb.peso, 1, pb.beneficio);
+                    mochila_voraz.trazar("se incorpora a la solución el objeto => peso:"+pb.peso+"  fracción:1  beneficio:"+pb.beneficio);
+                    peso += pb.peso;
+                    mochila_voraz.trazar("peso actualizado a => "+peso);
+                }
+                else{
+                    mochila_voraz.trazar("máximo de capacidad alcanzado, objeto fraccionado");
+                    res[contador] = new ResultadoMochila(pb.peso, ((capacidad-pb.peso)/pb.peso), (((capacidad-pb.peso)/pb.peso))*pb.beneficio);
+                    mochila_voraz.trazar("se incorpora a la solución el objeto => peso:"+pb.peso+"  fracción:"+((capacidad-pb.peso)/pb.peso)+"  beneficio:"+(((capacidad-pb.peso)/pb.peso))*pb.beneficio);
+                    peso = capacidad;
+                    mochila_voraz.trazar("peso actualizado a => "+peso);
+                }
+
+                contador++;
+            }
+
+        return res;
+    }
+
+    class ResultadoMochila{
+        float peso;
+        float fraccion;
+        float beneficio;
+
+        public ResultadoMochila(float peso, float fraccion, float beneficio){
+            this.peso      = peso;
+            this.fraccion  = fraccion;
+            this.beneficio = beneficio;
+        }
     }
 
     class PesoBeneficio implements Comparable{
@@ -442,6 +503,7 @@ class Mochila {
             else return -1;
         }
 
+        @Override
         public String toString(){
             return peso+"|"+beneficio;
         }

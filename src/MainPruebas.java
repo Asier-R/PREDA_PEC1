@@ -109,9 +109,9 @@ public class MainPruebas {
         //monte.heapShort(bbb);
         //System.out.println(Arrays.toString(bbb));
 
-        float[] pesos      = new float[]{2,4,5,1};
-        float[] beneficios = new float[]{2,4,5,1};
-        int cantidad       = 4;
+        float[] pesos      = new float[]{2,2,4,5,1};
+        float[] beneficios = new float[]{2,2,4,5,1};
+        int cantidad       = 5;
         float capacidad    = 20;
 
         Mochila mochi = new Mochila(cantidad, pesos, beneficios, capacidad);
