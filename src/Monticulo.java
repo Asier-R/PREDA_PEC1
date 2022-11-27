@@ -4,7 +4,7 @@ import java.lang.reflect.Array;
  * @author Asier Rodríguez
  * @version 1.0
  */
-public class Monticulo <T extends Comparable<T>>{
+public class Monticulo <T extends Comparable>{
 
     /**
      * Variable auxiliar utilizada para poder instanciar un array utilizando genéricos.
@@ -208,10 +208,9 @@ public class Monticulo <T extends Comparable<T>>{
     }
 
     /**
-     * Recibe un vector y lo devuelve con los elementos ordenados de mayor a menor.
+     * Recibe un vector y lo ordenada de mayor a menor.
      * Complejidad temporal O(n*log(n)).
      * @param vector vector sobre el que se realizará la acción heapShort.
-     * @return vector ordenado de mayor a menor.
      */
     public void heapShort(T[] vector){
         if(vector.length < 1 ) throw new IllegalArgumentException("ERROR: el tamaño del vector no puede ser menor a 1.");
@@ -223,7 +222,6 @@ public class Monticulo <T extends Comparable<T>>{
             cima = obtenerCima(clon); // O(log(n))
             vector[i] = cima;
         }
-
-        //return vector;
     }
+
 }

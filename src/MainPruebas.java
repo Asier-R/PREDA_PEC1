@@ -1,3 +1,5 @@
+import com.sun.security.jgss.GSSUtil;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Arrays;
@@ -75,13 +77,13 @@ public class MainPruebas {
         System.out.println();
         */
 
-        Integer[] bbb = new Integer[]{2,3,4,5};
+        /*Integer[] bbb = new Integer[]{2,3,4,5};
         Integer[] ccc;
         Integer[] ddd;
         Integer a = 0;
 
         Monticulo<Integer> monte = new Monticulo(a);
-        /*System.out.println("INI  "+Arrays.toString(bbb));
+        System.out.println("INI  "+Arrays.toString(bbb));
         monte.flotar(bbb,3);
         System.out.println("Flotar 3: "+Arrays.toString(bbb));
         ccc = monte.insertar(15,bbb);
@@ -91,8 +93,7 @@ public class MainPruebas {
         System.out.println("FIN  "+Arrays.toString(ddd));
         monte.mostrarCima(ddd);
         System.out.println(monte.mostrarCima(ddd));*/
-
-        bbb = new Integer[]{null, 2,3,4,5};
+        //bbb = new Integer[]{null, 2,3,4,5};
         //bbb = new Integer[]{4,6,4,5,1,3,2};
         //monte.hundir(bbb,0);
         //System.out.println(Arrays.toString(bbb));
@@ -105,12 +106,19 @@ public class MainPruebas {
         //System.out.println("FIN  "+Arrays.toString(bbb));
         //monte.obtenerCima(bbb);
         //System.out.println(Arrays.toString(bbb));
+        //monte.heapShort(bbb);
+        //System.out.println(Arrays.toString(bbb));
 
-        monte.heapShort(bbb);
-        System.out.println(Arrays.toString(bbb));
+        float[] pesos      = new float[]{2,4,5,1};
+        float[] beneficios = new float[]{2,4,5,1};
+        int cantidad       = 4;
+        float capacidad    = 20;
 
-
-
+        Mochila mochi = new Mochila(cantidad, pesos, beneficios, capacidad);
+        Monticulo<Mochila.PesoBeneficio> monte = new Monticulo(mochi.getPesosBeneficios()[0]);
+        System.out.println(Arrays.toString(mochi.getPesosBeneficios()));
+        monte.heapShort(mochi.getPesosBeneficios());
+        System.out.println(Arrays.toString(mochi.getPesosBeneficios()));
     }
 
 }

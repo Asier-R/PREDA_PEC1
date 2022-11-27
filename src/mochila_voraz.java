@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.FileSystemException;
+import java.util.Arrays;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -9,9 +10,10 @@ import java.util.regex.Pattern;
 
 /**
  * PEC1
- * AUTOR: Asier Rodríguez
  * CURSO: UNED PREDA 2022/2023
  * JDK: Oracle OpenJDK version 19
+ * @author Asier Rodríguez
+ * @version 1.0
  */
 public class mochila_voraz {
 
@@ -51,7 +53,9 @@ public class mochila_voraz {
             }
 
             //Inicialización de montículo
-
+            Monticulo<Mochila.PesoBeneficio> monticulo = new Monticulo<>(mochila.getPesosBeneficios()[0]);
+            //System.out.println(Arrays.toString(mochila.getPesosBeneficios()));
+            //monticulo.heapShort(mochila.getPesosBeneficios());
 
             //Selección de objetos
 
@@ -323,11 +327,11 @@ public class mochila_voraz {
         //Cantidad de tipo de objetos
         while(entradaErronea) {
             try {
-                System.out.println("SYSTEM: introduzca la cantidad de tipos de objetos posibles");
+                System.out.println("SYSTEM: introduzca la cantidad de objetos.");
                 cantidad = entrada.nextInt();
                 if(cantidad <= 0) throw new Exception("ERROR: no ha introducido un número entero mayor a cero.");
                 entradaErronea = false;
-                System.out.println("SYSTEM: cantidad de tipos de objetos => "+cantidad);
+                System.out.println("SYSTEM: cantidad de objetos => "+cantidad);
                 entrada.nextLine();
             } catch (Exception e) {
                 decidirSiFinalizarEjecucion(entrada, e);
@@ -377,11 +381,10 @@ public class mochila_voraz {
         //Inicializamos la mochila
         mochila = new Mochila(cantidad, pesos, beneficios, capacidad);
 
-
         System.out.println("SYSTEM: los datos de la mochila son => ");
         System.out.println("objetos: "+mochila.getCantidadObjetos());
         for (int e=0; e<mochila.getCantidadObjetos(); e++)
-            System.out.println("peso: "+mochila.getPesos()[e]+" beneficio: "+mochila.getBeneficios()[e]);
+            System.out.println("peso: "+mochila.getPesosBeneficios()[e].peso+" beneficio: "+mochila.getPesosBeneficios()[e].beneficio);
         System.out.println("capacidad: "+mochila.getCapacidad());
 
         System.out.println("SYSTEM: fin de entrada por teclado.\n");
@@ -408,23 +411,44 @@ public class mochila_voraz {
 class Mochila {
 
     private final int cantidadObjetos;
-    private final float[] pesos;
-    private final float[] beneficios;
+    private PesoBeneficio[] pesosBeneficios;
     private final float capacidad;
 
     public Mochila(int cantidad_de_objetos, float[] pesos_de_objetos, float[] beneficios_de_objetos, float capacidad_de_mochila) {
         this.cantidadObjetos = cantidad_de_objetos;
-        this.pesos = pesos_de_objetos;
-        this.beneficios = beneficios_de_objetos;
-        this.capacidad = capacidad_de_mochila;
+        this.capacidad       = capacidad_de_mochila;
+
+        this.pesosBeneficios = new PesoBeneficio[pesos_de_objetos.length];
+
+        for(int i=0; i<pesos_de_objetos.length; i++)
+            this.pesosBeneficios[i] = new PesoBeneficio(pesos_de_objetos[i], beneficios_de_objetos[i]);
+
     }
 
-    public float[] getPesos(){
-        return this.pesos;
+    class PesoBeneficio implements Comparable{
+        float peso;
+        float beneficio;
+
+        public PesoBeneficio(float peso, float beneficio){
+            this.peso = peso;
+            this.beneficio = beneficio;
+        }
+
+        @Override
+        public int compareTo(Object o) {
+            PesoBeneficio pb = (PesoBeneficio) o;
+            if(this.peso > pb.peso) return 1;
+            else if(this.peso == pb.peso) return 0;
+            else return -1;
+        }
+
+        public String toString(){
+            return peso+"|"+beneficio;
+        }
     }
 
-    public float[] getBeneficios(){
-        return this.beneficios;
+    public PesoBeneficio[] getPesosBeneficios(){
+        return this.pesosBeneficios;
     }
 
     public float getCapacidad(){
