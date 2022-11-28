@@ -48,68 +48,17 @@ public class MainPruebas {
         //float p = Float.parseFloat("8.2");
         //System.out.println(p);
 
-        /*try {
-            String fichero = "C:\\Users\\izask\\Desktop\\UNED\\Asignaturas\\2022-2023\\Programacion y Estructuras de Datos Avanzadas\\PRACTICA 1\\PREDA_PEC1\\FICHEROS\\ficheroPruebas.txt";
-            mochila_voraz.main(new String[] {"-t","-h",fichero});
+        try {
+            String fichero = "C:\\Users\\Monst\\Desktop\\UNED\\Asignaturas\\2022-2023\\Programacion y Estructuras de Datos Avanzadas\\PRACTICA 1\\PREDA_PEC1\\FICHEROS\\ficheroPruebas.txt";
+            mochila_voraz.main(new String[] {"-t",fichero});
         }catch(Exception e){
             System.out.println(e.getMessage());
             e.printStackTrace();
-        }*/
+        }
 
-        /*Integer aa = 1;
-        Integer bb = 2;
-        Integer cc = null;
-        //compareTO => negativo: menor    cero: igual    positivo: mayor
-        boolean buu = aa.compareTo(bb)>0;
-        System.out.println("aa > bb: "+buu);
-        buu = aa.compareTo(cc)>0;
-        System.out.println("aa > bb: "+buu);
 
-        String[] bobo = new String[0];
-        System.out.println(bobo.length);
-        System.out.println(bobo[0]);
-        */
 
-        /*
-        Integer[] bbb = new Integer[]{2,3,4,5};
-        Integer[] ccc = new Integer[10];
-        System.arraycopy(bbb,0,ccc,1,bbb.length);
-        System.out.println();
-        */
-
-        /*Integer[] bbb = new Integer[]{2,3,4,5};
-        Integer[] ccc;
-        Integer[] ddd;
-        Integer a = 0;
-
-        Monticulo<Integer> monte = new Monticulo(a);
-        System.out.println("INI  "+Arrays.toString(bbb));
-        monte.flotar(bbb,3);
-        System.out.println("Flotar 3: "+Arrays.toString(bbb));
-        ccc = monte.insertar(15,bbb);
-        System.out.println("Insertar 15: "+Arrays.toString(ccc));
-        ddd = monte.insertar(1,ccc);
-        System.out.println("Insertar 1: "+Arrays.toString(ddd));
-        System.out.println("FIN  "+Arrays.toString(ddd));
-        monte.mostrarCima(ddd);
-        System.out.println(monte.mostrarCima(ddd));*/
-        //bbb = new Integer[]{null, 2,3,4,5};
-        //bbb = new Integer[]{4,6,4,5,1,3,2};
-        //monte.hundir(bbb,0);
-        //System.out.println(Arrays.toString(bbb));
-        // monte.hundir(bbb,0);
-        // System.out.println(Arrays.toString(bbb));
-        // monte.hundir(bbb,0);
-        //System.out.println(Arrays.toString(bbb));
-        //System.out.println("INI "+Arrays.toString(bbb));
-        //monte.creaMonticuloLineal(bbb);
-        //System.out.println("FIN  "+Arrays.toString(bbb));
-        //monte.obtenerCima(bbb);
-        //System.out.println(Arrays.toString(bbb));
-        //monte.heapShort(bbb);
-        //System.out.println(Arrays.toString(bbb));
-
-        float[] pesos      = new float[]{2,2,4,5,1};
+        /*float[] pesos      = new float[]{2,2,4,5,1};
         float[] beneficios = new float[]{2,2,4,5,1};
         int cantidad       = 5;
         float capacidad    = 20;
@@ -118,7 +67,10 @@ public class MainPruebas {
         Monticulo<Mochila.PesoBeneficio> monte = new Monticulo(mochi.getPesosBeneficios()[0]);
         System.out.println(Arrays.toString(mochi.getPesosBeneficios()));
         monte.heapShort(mochi.getPesosBeneficios());
-        System.out.println(Arrays.toString(mochi.getPesosBeneficios()));
+        System.out.println(Arrays.toString(mochi.getPesosBeneficios()));*/
+
+
+
     }
 
 }
