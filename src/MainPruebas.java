@@ -2,6 +2,8 @@ import com.sun.security.jgss.GSSUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -55,7 +57,6 @@ public class MainPruebas {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }
-
 
 
         /*float[] pesos      = new float[]{2,2,4,5,1};

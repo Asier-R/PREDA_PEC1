@@ -1,7 +1,6 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.FileSystemException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.Scanner;
@@ -59,7 +58,11 @@ public class mochila_voraz {
             System.out.println(Arrays.toString(resultado));
 
             //Salida de datos
+            String salida = "";
+            for (Mochila.ResultadoMochila res : resultado)
+                if(res.peso != 0) salida += res+"\n";
 
+            escribirFichero(salida);
 
 
         } catch (Exception iae) {
@@ -310,6 +313,30 @@ public class mochila_voraz {
         return datos.toString();
     }
 
+    static void escribirFichero(String salida) throws IOException {
+        String path;
+        FileOutputStream fos;
+        if(existeFicheroSalida) {
+            path = ficheroSalida;
+            fos = new FileOutputStream(path);
+        }
+        else{
+            path = System.getProperty("user.dir")+"\\"+"salida_mochila_voraz.txt";
+            fos = new FileOutputStream(path,true);
+        }
+
+        StringBuilder datos = new StringBuilder();
+
+        datos.append("\n.................... ");
+        datos.append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date()));
+        datos.append(" ....................\n");
+        datos.append("Salida producto de la ejecución de mochila_voraz:\n");
+        datos.append(salida);
+
+        fos.write(datos.toString().getBytes());
+        fos.close();
+    }
+
     static void esEntradaPorTecladoValida() throws IOException{
 
         Scanner entrada = new Scanner(System.in);
@@ -457,7 +484,6 @@ class Mochila {
                 if( (peso + pb.peso) < capacidad ){
                     mochila_voraz.trazar("máximo de capacidad no alcanzado, objeto no fraccionado");
                     res[contador] = new ResultadoMochila(pb.peso, 1, pb.beneficio);
-                    mochila_voraz.trazar("se incorpora a la solución el objeto => peso:"+pb.peso+"  fracción:1  beneficio:"+pb.beneficio);
                     peso += pb.peso;
                     beneficioTotal += pb.beneficio;
                 }
@@ -490,7 +516,7 @@ class Mochila {
 
         @Override
         public String toString(){
-            return this.peso+"|"+this.fraccion+"|"+this.beneficio;
+            return this.peso+" "+this.fraccion+" "+this.beneficio;
         }
 
     }
@@ -518,7 +544,7 @@ class Mochila {
 
         @Override
         public String toString(){
-            return this.peso+"|"+this.beneficio;
+            return this.peso+" "+this.beneficio;
         }
     }
 
