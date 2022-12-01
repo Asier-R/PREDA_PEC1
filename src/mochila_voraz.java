@@ -62,6 +62,7 @@ public class mochila_voraz {
             for (Mochila.ResultadoMochila res : resultado)
                 if(res.peso != 0) salida += res+"\n";
 
+            salida += mochila.getBeneficioObtenido();
             escribirFichero(salida);
 
 
@@ -438,6 +439,7 @@ class Mochila {
     private final int cantidadObjetos;
     private PesoBeneficio[] pesosBeneficios;
     private final float capacidad;
+    private float beneficioObtenido = 0f;
 
     public Mochila(int cantidad_de_objetos, float[] pesos_de_objetos, float[] beneficios_de_objetos, float capacidad_de_mochila) {
         this.cantidadObjetos = cantidad_de_objetos;
@@ -500,7 +502,8 @@ class Mochila {
                 contador++;
             }
 
-        return res;
+            mochila.beneficioObtenido = beneficioTotal;
+            return res;
     }
 
     class ResultadoMochila{
@@ -557,7 +560,11 @@ class Mochila {
     }
 
     public int getCantidadObjetos(){
-        return cantidadObjetos;
+        return this.cantidadObjetos;
+    }
+
+    public float getBeneficioObtenido(){
+        return this.beneficioObtenido;
     }
 
 }
