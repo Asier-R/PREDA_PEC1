@@ -4,12 +4,12 @@ import java.lang.reflect.Array;
  * @author Asier Rodríguez
  * @version 1.0
  */
-public class Monticulo <T extends Comparable>{
+public class Monticulo <T extends Comparable<T>>{
 
     /**
      * Variable auxiliar utilizada para poder instanciar un array utilizando genéricos.
      */
-    private T clase;
+    private final T clase;
 
     /**
      * Variable array que contendrá el montículo de tipo T.
@@ -50,11 +50,12 @@ public class Monticulo <T extends Comparable>{
     /**
      * Crea un montículo vacío de tamaño 1 (mínimo posible).
      * Complejidad temporal lineal O(1). La información obtenida en internet sugiere que la complejidad temporal estaría
-     * entorno a O(n), puesto que la máquina virtual tiene que reservar memoria e introducir el valor null en cada
+     * en torno a O(n), puesto que la máquina virtual tiene que reservar memoria e introducir el valor null en cada
      * posición del array. Para simplificar el cálculo de la complejidad, y al tener un tamaño de 1, se asumirá que el
      * coste es de la creación del montículo es constante.
      * @return una nueva instancia de un montículo vacío.
      */
+    @SuppressWarnings("unchecked")
     public T[] crearMonticuloVacio(){
         return (T[]) Array.newInstance(clase.getClass(),1);
     }
@@ -62,13 +63,14 @@ public class Monticulo <T extends Comparable>{
     /**
      * Crea un montículo vacío de tamaño n > 1.
      * Complejidad temporal lienal O(n). La información obtenida en internet sugiere que la complejidad temporal estaría
-     * entorno a O(n), puesto que la máquina virtual tiene que reservar memoria e introducir el valor null en cada
+     * en torno a O(n), puesto que la máquina virtual tiene que reservar memoria e introducir el valor null en cada
      * posición del array. Para simplificar el cálculo de la complejidad, y al tener un tamaño n, se asumirá que el
      * coste es de la creación del montículo es lienal.
      * @param tamano tamaño del montículo a crear. Si no se indica tamaño, se creará de tamaño 1.
      * @throws IllegalArgumentException si el vector de entrada tiene un tamaño < 0.
      * @return una nueva instancia de un montículo de tamaño n.
      */
+    @SuppressWarnings("unchecked")
     public T[] crearMonticuloVacio(int tamano){
         if(tamano < 1 ) throw new IllegalArgumentException("ERROR: el tamaño del montículo no puede ser menor a 1.");
         return (T[]) Array.newInstance(clase.getClass(),tamano);
@@ -81,17 +83,17 @@ public class Monticulo <T extends Comparable>{
      */
     public boolean elMonticuloEstaVacio(T[] monticulo){
         if(monticulo.length == 0) return true;
-        for(int i=0; i<monticulo.length; i++) if(monticulo[i] != null) return false;
+        for (T t : monticulo) if (t != null) return false;
         return true;
     }
 
     /**
-     * Reubica el elemento i del vector, en caso de que este sea mayor que el padre, hasta que esté correctamente
+     * Reubica el elemento 'i' del vector, en caso de que este sea mayor que el padre, hasta que esté correctamente
      * situado en el montículo y se haya restablecido la propiedad de montículo.
      * Se utiliza para la inserción de un elemento nuevo en el montículo.
      * Complejidad temporal lineal O(n/2). Cada iteración del bucle corresponde a un nivel del montículo y cada nivel
      * tiene solo dos elementos. Ambos elementos se exploran en la misma iteración, por lo que el bucle será de tamaño
-     * n/2, donde n es la cantidad de elementos en el montículo.
+     * n/2, donde 'n' es la cantidad de elementos en el montículo.
      * @param monticulo montículo sobre el que se realizará la acción flotar.
      * @param elemento posición en el montículo del elemento sobre el que se realizará la acción flotar.
      */
@@ -112,7 +114,7 @@ public class Monticulo <T extends Comparable>{
      * Complejidad temporal logarítmico O(log(n)). El caso peor es aquel en el que el primer elemento acaba en el último
      * nivel del montículo. Cada iteración del bucle corresponde a un nivel del montículo y cada nivel tiene solo dos
      * elementos. Ambos elementos se exploran en la misma iteración, por lo que el bucle será de tamaño log2(2^n),
-     * donde n es la cantidad de elementos en el montículo.
+     * donde 'n' es la cantidad de elementos en el montículo.
      * @param monticulo montículo sobre el que se realizará la acción hundir.
      * @param elemento posición en el montículo del elemento sobre el que se realizará la acción hundir.
      */

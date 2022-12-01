@@ -1,7 +1,6 @@
 import java.io.*;
 import java.nio.file.FileSystemException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -54,27 +53,20 @@ public class mochila_voraz {
             //Se resuelve el problema de la mochila con objetos fraccionable
             Mochila.ResultadoMochila[] resultado = mochila.mochilaObjetosFraccionables(mochila);
 
-            //Selección de objetos
-            System.out.println(Arrays.toString(resultado));
-
             //Salida de datos
-            String salida = "";
+            StringBuilder salida = new StringBuilder();
             for (Mochila.ResultadoMochila res : resultado)
-                if(res.peso != 0) salida += res+"\n";
+                if(res.peso != 0) salida.append(res).append("\n");
 
-            salida += mochila.getBeneficioObtenido();
-            escribirFichero(salida);
-
+            salida.append(mochila.getBeneficioObtenido());
+            escribirFichero(salida.toString());
 
         } catch (Exception iae) {
             gestionarMensajeError(iae);
 
         }
 
-
         System.out.println("\nSYSTEM: FIN DE PROGRAMA MOCHILA_VORAZ\n");
-
-
     }
 
     static <Excep extends Exception> void gestionarMensajeError(Excep e){
@@ -326,15 +318,15 @@ public class mochila_voraz {
             fos = new FileOutputStream(path,true);
         }
 
-        StringBuilder datos = new StringBuilder();
+        String datos = "";
 
-        datos.append("\n.................... ");
-        datos.append(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date()));
-        datos.append(" ....................\n");
-        datos.append("Salida producto de la ejecución de mochila_voraz:\n");
-        datos.append(salida);
+        datos += ("\n.................... ");
+        datos += (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date()));
+        datos += (" ....................\n");
+        datos += ("Salida producto de la ejecución de mochila_voraz:\n");
+        datos += (salida);
 
-        fos.write(datos.toString().getBytes());
+        fos.write(datos.getBytes());
         fos.close();
     }
 
@@ -437,7 +429,7 @@ public class mochila_voraz {
 class Mochila {
 
     private final int cantidadObjetos;
-    private PesoBeneficio[] pesosBeneficios;
+    private final PesoBeneficio[] pesosBeneficios;
     private final float capacidad;
     private float beneficioObtenido = 0f;
 
@@ -467,7 +459,7 @@ class Mochila {
 
             // Se inicia montículo con una referencia al tipo de datos.
             mochila_voraz.trazar("se inicia montículo");
-            Monticulo<Mochila.PesoBeneficio> mont = new Monticulo(mchPB[0]);
+            Monticulo<Mochila.PesoBeneficio> mont = new Monticulo<>(mchPB[0]);
 
             // Se ordenan los objetos en orden decreciente
             mochila_voraz.trazar("se ordenan los objetos introducidos por "+(mochila_voraz.existeFicheroSalida?"fichero":"teclado"));
@@ -524,7 +516,7 @@ class Mochila {
 
     }
 
-    class PesoBeneficio implements Comparable{
+    class PesoBeneficio implements Comparable<PesoBeneficio>{
         float peso;
         float beneficio;
         float ratio;
@@ -536,13 +528,10 @@ class Mochila {
         }
 
         @Override
-        public int compareTo(Object o) {
-            PesoBeneficio pb = (PesoBeneficio) o;
+        public int compareTo(PesoBeneficio pb) {
             float ratio = pb.beneficio/pb.peso;
 
-            if(this.ratio > ratio) return 1;
-            else if(this.ratio == ratio) return 0;
-            else return -1;
+            return Float.compare(this.ratio, ratio);
         }
 
         @Override
