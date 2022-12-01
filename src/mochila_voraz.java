@@ -61,9 +61,10 @@ public class mochila_voraz {
             salida.append(mochila.getBeneficioObtenido());
             escribirFichero(salida.toString());
 
+            if(!existeFicheroSalida) System.out.println("\nSYSTEM: resultado\n"+salida);
+
         } catch (Exception iae) {
             gestionarMensajeError(iae);
-
         }
 
         System.out.println("\nSYSTEM: FIN DE PROGRAMA MOCHILA_VORAZ\n");
