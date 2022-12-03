@@ -171,7 +171,7 @@ public class Monticulo <T extends Comparable<T>>{
      * Inserta un elemento en el montículo y lo flota hasta restaurar la propiedad de montículo.
      * Complejidad temporal lineal O(n). No se añaden espacios (nulos) adicionales al montículo para simplificar el
      * algoritmo de flotar y hundir. Aunque esto implica que siempre que se inserta un elemento se hace en un tiempo O(n).
-     * @see Monticulo#crearMonticuloVacio
+     * @see Monticulo#crearMonticuloVacio(int) 
      * @see Monticulo#flotar
      * @param elemento elemento a insertar en montículo.
      * @param monticulo montículo sobre el que se realiza la acción insertar.
