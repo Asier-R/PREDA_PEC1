@@ -48,7 +48,8 @@ public class mochila_voraz {
     static Mochila mochila;
 
     /**
-     * Método principal del programa y que recibe los argumentos de configuración.
+     * Método principal del programa y que recibe los argumentos de inicio de programa.
+     * @param args argumentos de inicio de programa.
      */
     public static void main(String[] args) {
         System.out.println("\nSYSTEM: INICIO DE PROGRAMA MOCHILA_VORAZ\n\n");
@@ -101,6 +102,7 @@ public class mochila_voraz {
     /**
      * Método encargado de gestionar el mensaje de error de las excepciones.
      * @param e excepción a gestionar.
+     * @param <Excep> clase de tipo excepción a gestionar.
      */
     private static <Excep extends Exception> void gestionarMensajeError(Excep e){
         System.out.println(e.getMessage().startsWith("ERROR: ")?e.getMessage()+"\n":"ERROR: error inesperado => "+e.getMessage()+"\n");
@@ -518,7 +520,7 @@ public class mochila_voraz {
 
     /**
      * Método encargado de mostrar trazas si estas han sido activadas previamente.
-     * @param traza
+     * @param traza mensaje de texto a trazar.
      */
     static void trazar(String traza){
         if(trazasActivas) System.out.println("TRAZA: "+traza+".");
@@ -703,6 +705,11 @@ class Mochila {
          */
         float ratio;
 
+        /**
+         * Constructor encargado de asignar los valores a un objeto.
+         * @param peso peso del objeto.
+         * @param beneficio beneficio del objeto.
+         */
         public PesoBeneficio(float peso, float beneficio){
             this.peso      = peso;
             this.beneficio = beneficio;
