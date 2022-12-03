@@ -1,13 +1,4 @@
-import com.sun.security.jgss.GSSUtil;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.text.Format;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+package mochilaVoraz;
 
 public class MainPruebas {
     public static void main(String[] args) {
@@ -33,15 +24,15 @@ public class MainPruebas {
 
         casosPrueba.forEach(caso -> {
             System.out.println("CASO: "+ Arrays.stream(caso).toList().toString());
-            mochila_voraz.main(caso);
-            mochila_voraz.existeFicheroEntrada = false;
-            mochila_voraz.existeFicheroSalida = false;
-            mochila_voraz.trazasActivas = false;
-            mochila_voraz.FINDEPROGAMA = false;
+            mochilaVoraz.mochila_voraz.main(caso);
+            mochilaVoraz.mochila_voraz.existeFicheroEntrada = false;
+            mochilaVoraz.mochila_voraz.existeFicheroSalida = false;
+            mochilaVoraz.mochila_voraz.trazasActivas = false;
+            mochilaVoraz.mochila_voraz.FINDEPROGAMA = false;
             System.out.println("-----------------------------------------------------------------------------------");
         });*/
 
-        //mochila_voraz.entradaPorTeclado();
+        //mochilaVoraz.mochila_voraz.entradaPorTeclado();
 
         //String[] sp = ("10\n10 43\n2 2.3\n20").split("\n");
         //for(int i=0; i<sp.length; i++)
@@ -64,8 +55,8 @@ public class MainPruebas {
         int cantidad       = 5;
         float capacidad    = 20;
 
-        Mochila mochi = new Mochila(cantidad, pesos, beneficios, capacidad);
-        Monticulo<Mochila.PesoBeneficio> monte = new Monticulo(mochi.getPesosBeneficios()[0]);
+        mochilaVoraz.Mochila mochi = new mochilaVoraz.Mochila(cantidad, pesos, beneficios, capacidad);
+        mochilaVoraz.Monticulo<mochilaVoraz.Mochila.PesoBeneficio> monte = new mochilaVoraz.Monticulo(mochi.getPesosBeneficios()[0]);
         System.out.println(Arrays.toString(mochi.getPesosBeneficios()));
         monte.heapShort(mochi.getPesosBeneficios());
         System.out.println(Arrays.toString(mochi.getPesosBeneficios()));*/

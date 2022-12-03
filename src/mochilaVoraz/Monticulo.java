@@ -1,3 +1,5 @@
+package mochilaVoraz;
+
 import java.lang.reflect.Array;
 
 /**
@@ -79,6 +81,7 @@ public class Monticulo <T extends Comparable<T>>{
     /**
      * El montículo está vacío si tiene un tamaño de 0 o no tiene elementos.
      * Complejidad temporal lineal O(n) en el caso peor.
+     * @param monticulo montículo que se inspeccionará para ver si está vacío.
      * @return true si montículo vacío.
      */
     public boolean elMonticuloEstaVacio(T[] monticulo){
@@ -213,6 +216,7 @@ public class Monticulo <T extends Comparable<T>>{
      * Recibe un vector y lo ordenada de mayor a menor.
      * Complejidad temporal O(n*log(n)).
      * @param vector vector sobre el que se realizará la acción heapShort.
+     * @throws IllegalArgumentException si el vector de entrada es de tamaño < 1.
      */
     public void heapShort(T[] vector){
         if(vector.length < 1 ) throw new IllegalArgumentException("ERROR: el tamaño del vector no puede ser menor a 1.");
