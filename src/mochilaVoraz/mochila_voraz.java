@@ -9,9 +9,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * UNED PREDA 2022/2023 - PEC1 - Oracle OpenJDK version 19. Clase principal del programa, donde se solicitan los datos
- * de entrada al usuario y se ejecuta el algoritmo voraz que resuelve el problema de la mochila para objetos
- * fraccionables.
+ * Clase principal del programa, donde se solicitan los datos de entrada al usuario y se ejecuta el algoritmo voraz que
+ * resuelve el problema de la mochila para objetos fraccionables.
+ * UNED PREDA 2022/2023 - PEC1 - Oracle OpenJDK version 19.
  * @author Asier Rodríguez López
  * @version 1.0
  * @since 1.0
@@ -530,6 +530,7 @@ public class mochila_voraz {
 
 /**
  * Clase creada exprofeso para ser el soporte de los datos de entrada.
+ * UNED PREDA 2022/2023 - PEC1 - Oracle OpenJDK version 19.
  * @author Asier Rodríguez López
  * @version 1.0
  * @since 1.0
@@ -638,7 +639,7 @@ class Mochila {
     }
 
     /**
-     * Clase creada exprofeso para ser el soporte del resultado de la selección de un objeto por el algoritmo aplicado
+     * Sub-Clase creada exprofeso para ser el soporte del resultado de la selección de un objeto por el algoritmo aplicado
      * a la mochila.
      * @author Asier Rodríguez López
      * @version 1.0
@@ -684,7 +685,7 @@ class Mochila {
     }
 
     /**
-     * Clase utilizada como soporte de los datos y atributos de los objetos disponibles para introducir en la mochila.
+     * Sub-Clase utilizada como soporte de los datos y atributos de los objetos disponibles para introducir en la mochila.
      * @author Asier Rodríguez López
      * @version 1.0
      * @since 1.0

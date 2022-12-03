@@ -3,8 +3,9 @@ package mochilaVoraz;
 import java.lang.reflect.Array;
 
 /**
- * UNED PREDA 2022/2023 - PEC1 - Oracle OpenJDK version 19. Clase que representa la estructura de datos "Montículo"
- * utilizada para resolver el problema de la mochila con objetos fraccionables.
+ * Clase que representa la estructura de datos "Montículo" utilizada para resolver el problema de la mochila con objetos
+ * fraccionables.
+ * UNED PREDA 2022/2023 - PEC1 - Oracle OpenJDK version 19.
  * @author Asier Rodríguez López
  * @version 1.0
  * @since 1.0
