@@ -49,6 +49,16 @@ public class mochila_voraz {
 
     /**
      * Método principal del programa y que recibe los argumentos de inicio de programa.
+     * @see mochila_voraz#mostrarAyuda
+     * @see mochila_voraz#sonArgumentosValidos
+     * @see mochila_voraz#sonValidosDatosFichero
+     * @see mochila_voraz#esEntradaPorTecladoValida
+     * @see mochila_voraz#leerFichero
+     * @see mochila_voraz#escribirFichero
+     * @see mochila_voraz#gestionarMensajeError
+     * @see Mochila
+     * @see Mochila.ResultadoMochila
+     * @see Mochila#mochilaObjetosFraccionables
      * @param args argumentos de inicio de programa.
      */
     public static void main(String[] args) {
@@ -211,6 +221,8 @@ public class mochila_voraz {
     /**
      * Evalúa el argumento de inicio y devuelve true si es correcto. Si el argumento es un fichero, validará este. Será
      * eliminado en la próxima versión.
+     * @see mochilaVoraz.mochila_voraz#trazasActivadas
+     * @see mochilaVoraz.mochila_voraz#mostrarAyuda
      * @see mochilaVoraz.mochila_voraz#esValidoArgumentoFichero
      * @param arg argumento a validar.
      * @return true si el argumento es válido.
@@ -230,6 +242,8 @@ public class mochila_voraz {
 
     /**
      * Evalúa el argumento de inicio y devuelve true si es correcto. Si el argumento es un fichero, validará este.
+     * @see mochilaVoraz.mochila_voraz#trazasActivadas
+     * @see mochilaVoraz.mochila_voraz#mostrarAyuda
      * @see mochilaVoraz.mochila_voraz#validarFichero
      * @param arg arg argumento a validar.
      * @param esEntrada indica si el argumento es un fichero de entrada.
@@ -295,6 +309,7 @@ public class mochila_voraz {
 
     /**
      * Verifica que los datos del fichero se ajustan a las especificaciones del programa.
+     * @see Mochila
      * @param datos datos del fichero.
      * @throws FileSystemException cuando los datos no tienen el formato correcto.
      */
@@ -420,6 +435,11 @@ public class mochila_voraz {
 
     /**
      * Verifica que la entrada por teclado es válida.
+     * @see mochila_voraz#decidirSiFinalizarEjecucion
+     * @see Mochila
+     * @see Mochila#getCantidadObjetos
+     * @see Mochila#getPesosBeneficios
+     * @see Mochila#getCapacidad
      * @throws IOException cuando se da un error en la entrada de datos.
      */
     private static void esEntradaPorTecladoValida() throws IOException{
@@ -579,7 +599,11 @@ class Mochila {
     /**
      * Algoritmo voraz que selecciona los objetos y su fracción a partir de los datos de la mochila, obteniendo el
      * máximo beneficio por unidad de peso.
+     * @see mochila_voraz
+     * @see mochila_voraz#trazar
      * @see Mochila.ResultadoMochila
+     * @see Mochila.PesoBeneficio
+     * @see Monticulo
      * @see Monticulo#heapShort
      * @param mochila mochila con los datos entre los que se hará la selección.
      * @return resultado final del algoritmo.

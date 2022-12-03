@@ -25,6 +25,7 @@ public class Monticulo <T extends Comparable<T>>{
 
     /**
      * Si no se dispone de un array se inicializa la clase y el montículo vacío.
+     * @see Monticulo#crearMonticuloVacio
      * @param clase instancia de la clase Comparable que se va a utilizar para crear el montículo.
      */
     public Monticulo(T clase){
@@ -35,6 +36,7 @@ public class Monticulo <T extends Comparable<T>>{
     /**
      * Transforma el array de entrada en un montículo.
      * El tamaño máximo no puede ser menor al del array de entrada.
+     * @see Monticulo#creaMonticuloLineal
      * @param clase instancia de la clase Comparable que se va a utilizar para crear el montículo.
      * @param vector vector sobre el cual se va a crear el montículo.
      * @throws IllegalArgumentException si el vector de entrada tiene un tamaño menor a cero.
@@ -102,6 +104,7 @@ public class Monticulo <T extends Comparable<T>>{
      * Complejidad temporal lineal O(n/2). Cada iteración del bucle corresponde a un nivel del montículo y cada nivel
      * tiene solo dos elementos. Ambos elementos se exploran en la misma iteración, por lo que el bucle será de tamaño
      * n/2, donde 'n' es la cantidad de elementos en el montículo.
+     * @see Monticulo#intercambiar
      * @param monticulo montículo sobre el que se realizará la acción flotar.
      * @param elemento posición en el montículo del elemento sobre el que se realizará la acción flotar.
      */
@@ -123,6 +126,7 @@ public class Monticulo <T extends Comparable<T>>{
      * nivel del montículo. Cada iteración del bucle corresponde a un nivel del montículo y cada nivel tiene solo dos
      * elementos. Ambos elementos se exploran en la misma iteración, por lo que el bucle será de tamaño log2(2^n),
      * donde 'n' es la cantidad de elementos en el montículo.
+     * @see Monticulo#intercambiar
      * @param monticulo montículo sobre el que se realizará la acción hundir.
      * @param elemento posición en el montículo del elemento sobre el que se realizará la acción hundir.
      */
@@ -167,6 +171,8 @@ public class Monticulo <T extends Comparable<T>>{
      * Inserta un elemento en el montículo y lo flota hasta restaurar la propiedad de montículo.
      * Complejidad temporal lineal O(n). No se añaden espacios (nulos) adicionales al montículo para simplificar el
      * algoritmo de flotar y hundir. Aunque esto implica que siempre que se inserta un elemento se hace en un tiempo O(n).
+     * @see Monticulo#crearMonticuloVacio
+     * @see Monticulo#flotar
      * @param elemento elemento a insertar en montículo.
      * @param monticulo montículo sobre el que se realiza la acción insertar.
      * @throws IllegalArgumentException si el elemento a insertar es nulo.
@@ -195,6 +201,8 @@ public class Monticulo <T extends Comparable<T>>{
     /**
      * Devuelve la cima del montículo, la elimina y recompone la propiedad de montículo.
      * Complejidad temporal O(log(n)).
+     * @see Monticulo#mostrarCima
+     * @see Monticulo#hundir
      * @param monticulo montículo sobre el que se realizará la acción obtenerCima.
      * @return cima del montículo.
      */
@@ -210,6 +218,7 @@ public class Monticulo <T extends Comparable<T>>{
     /**
      * Crea un montículo a partir de un vector.
      * Complejidad temporal O(n).
+     * @see Monticulo#hundir
      * @param vector array sobre el que se realizará la acción creaMonticuloLineal.
      */
     public void creaMonticuloLineal(T[] vector){
@@ -220,6 +229,8 @@ public class Monticulo <T extends Comparable<T>>{
     /**
      * Recibe un vector y lo ordenada de mayor a menor.
      * Complejidad temporal O(n*log(n)).
+     * @see Monticulo#creaMonticuloLineal
+     * @see Monticulo#obtenerCima
      * @param vector vector sobre el que se realizará la acción heapShort.
      * @throws IllegalArgumentException si el vector de entrada es de tamaño menor a uno.
      */
