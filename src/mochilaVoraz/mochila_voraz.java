@@ -9,21 +9,47 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * PEC1
- * CURSO: UNED PREDA 2022/2023
- * JDK: Oracle OpenJDK version 19
- * @author Asier Rodríguez
+ * UNED PREDA 2022/2023 - PEC1 - Oracle OpenJDK version 19. Clase principal del programa, donde se solicitan los datos
+ * de entrada al usuario y se ejecuta el algoritmo voraz que resuelve el problema de la mochila para objetos
+ * fraccionables.
+ * @author Asier Rodríguez López
  * @version 1.0
+ * @since 1.0
  */
 public class mochila_voraz {
-
+    /**
+     * True si se ha indicado fichero de entrada en los argumentos de inicio del programa.
+     */
     static boolean existeFicheroEntrada = false;
+
+    /**
+     * Ruta del fichero de entrada indicada en los argumentos de inicio del programa.
+     */
     static String ficheroEntrada = "";
+
+    /**
+     * True si se ha indicado fichero de salida en los argumentos de inicio del programa.
+     */
     static boolean existeFicheroSalida = false;
+
+    /**
+     * Ruta del fichero de salida indicada en los argumentos de inicio del programa.
+     */
     static String ficheroSalida = "";
+
+    /**
+     * Indica si se han activado las trazas.
+     */
     static boolean trazasActivas = false;
+
+    /**
+     * Clase que se utilizará de soporte para los datos de entrada.
+     */
     static Mochila mochila;
 
+    /**
+     * Método principal del programa y que recibe los argumentos de configuración.
+     */
     public static void main(String[] args) {
         System.out.println("\nSYSTEM: INICIO DE PROGRAMA MOCHILA_VORAZ\n\n");
         Locale.setDefault(Locale.ENGLISH);
@@ -72,11 +98,25 @@ public class mochila_voraz {
         System.out.println("\nSYSTEM: FIN DE PROGRAMA MOCHILA_VORAZ\n");
     }
 
-    static <Excep extends Exception> void gestionarMensajeError(Excep e){
+    /**
+     * Método encargado de gestionar el mensaje de error de las excepciones.
+     * @param e excepción a gestionar.
+     */
+    private static <Excep extends Exception> void gestionarMensajeError(Excep e){
         System.out.println(e.getMessage().startsWith("ERROR: ")?e.getMessage()+"\n":"ERROR: error inesperado => "+e.getMessage()+"\n");
     }
 
-    static boolean sonArgumentosValidos(String[] args){
+    /**
+     * Recibe los argumentos de inicio de programa y devuelve true si están correctamente introducidos. También se
+     * encarga de activar las trazas, mostrar el mensaje de ayuda y de gestionar los ficheros de entrada y salida.
+     * @see mochilaVoraz.mochila_voraz#trazasActivadas
+     * @see mochilaVoraz.mochila_voraz#mostrarAyuda
+     * @see mochilaVoraz.mochila_voraz#esValidoArgumento
+     * @see mochilaVoraz.mochila_voraz#esValidoArgumentoFichero
+     * @param args argumentos de inicio de programa.
+     * @return devuelve true si los argumentos son correctos.
+     */
+    private static boolean sonArgumentosValidos(String[] args){
         //Se utilizan 4 argumentos
         if(args.length == 4){
             //Primer argumento
@@ -147,12 +187,18 @@ public class mochila_voraz {
         }
     }
 
-    static void trazasActivadas(){
+    /**
+     * Muestra el mensaje de trazas activadas.
+     */
+    private static void trazasActivadas(){
         System.out.println("SYSTEM: se han activado las trazas.");
         trazasActivas = true;
     }
 
-    static void mostrarAyuda(){
+    /**
+     * Muestra el mensaje de ayuda.
+     */
+    private static void mostrarAyuda(){
         System.out.println("SINTAXIS: mochila_voraz [-t] [-h] [fichero_entrada] [fichero_salida]\n");
         System.out.println("             -t: traza cada paso de manera que se describa la aplicación del algoritmo utilizado.");
         System.out.println("             -h: muestra una ayuda y la sintaxis del comando.");
@@ -160,7 +206,14 @@ public class mochila_voraz {
         System.out.println(" fichero_salida: es el nombre del fichero que se creará para almacenar la salida.\n");
     }
 
-    static boolean esValidoArgumento(String arg){
+    /**
+     * Evalúa el argumento de inicio y devuelve true si es correcto. Si el argumento es un fichero, validará este. Será
+     * eliminado en la próxima versión.
+     * @see mochilaVoraz.mochila_voraz#esValidoArgumentoFichero
+     * @param arg argumento a validar.
+     * @return true si el argumento es válido.
+     */
+    private static boolean esValidoArgumento(String arg){
         switch (arg){
             case "-t":
                 trazasActivadas();
@@ -173,7 +226,14 @@ public class mochila_voraz {
         }
     }
 
-    static boolean esValidoArgumentoFichero(String arg, Boolean esEntrada){
+    /**
+     * Evalúa el argumento de inicio y devuelve true si es correcto. Si el argumento es un fichero, validará este.
+     * @see mochilaVoraz.mochila_voraz#validarFichero
+     * @param arg arg argumento a validar.
+     * @param esEntrada indica si el argumento es un fichero de entrada.
+     * @return true si el argumento es válido.
+     */
+    private static boolean esValidoArgumentoFichero(String arg, Boolean esEntrada){
         if(arg.equals("-t")){
             trazasActivadas();
         }
@@ -186,7 +246,15 @@ public class mochila_voraz {
         return true;
     }
 
-    static boolean validarFichero(String nombre_fichero, Boolean esEntrada){
+    /**
+     * Verifica que el fichero indicado en los argumentos de inicio de programa es válido. Se comprueba que existe, que
+     * es realmente un fichero, que se puede escribir o leer (en función de esEntrada) e informa las variables
+     * necesarias.
+     * @param nombre_fichero ruta completa con nombre del fichero a validar.
+     * @param esEntrada indica si el fichero es es de entrada.
+     * @return true si el fichero es válido.
+     */
+    private static boolean validarFichero(String nombre_fichero, Boolean esEntrada){
         System.out.println("SYSTEM: se comprueba fichero "+(esEntrada?"de entrada":"de salida")+" "+nombre_fichero+".");
         File fichero = new File(nombre_fichero);
         //¿Existe fichero?
@@ -223,7 +291,12 @@ public class mochila_voraz {
         return true;
     }
 
-    static void sonValidosDatosFichero(String datos) throws FileSystemException {
+    /**
+     * Verifica que los datos del fichero se ajustan a las especificaciones del programa.
+     * @param datos datos del fichero.
+     * @throws FileSystemException cuando los datos no tienen el formato correcto.
+     */
+    private static void sonValidosDatosFichero(String datos) throws FileSystemException {
         System.out.println("SYSTEM: inicio de la validación de los datos.");
 
         //Estructura del fichero
@@ -294,7 +367,13 @@ public class mochila_voraz {
         System.out.println("SYSTEM: datos correctos. Fin de validación de los datos.\n");
     }
 
-    static String leerFichero(String path) throws FileNotFoundException{
+    /**
+     * Lee el fichero indicado en el parámetro del método y devuelve sus datos.
+     * @param path ruta completa con nombre del fichero a leer.
+     * @return datos del fichero leído.
+     * @throws FileNotFoundException si el fichero no existe.
+     */
+    private static String leerFichero(String path) throws FileNotFoundException{
         //Obtenemos el fichero
         File fichero = new File(path);
 
@@ -309,20 +388,24 @@ public class mochila_voraz {
         return datos.toString();
     }
 
-    static void escribirFichero(String salida) throws IOException {
+    /**
+     * Escribe en el fichero indicado en los argumentos de inicio de programa. Si no existe el fichero se creará y se
+     * escribirá en un nuevo fichero de salida llamado "salida_mochila_voraz.txt".
+     * @param salida datos a escribir en el fichero de salida.
+     * @throws IOException cuando no es posible escribir en el fichero.
+     */
+    private static void escribirFichero(String salida) throws IOException {
         String path;
         FileOutputStream fos;
-        if(existeFicheroSalida) {
+
+        if(existeFicheroSalida)
             path = ficheroSalida;
-            fos = new FileOutputStream(path);
-        }
-        else{
+        else
             path = System.getProperty("user.dir")+"\\"+"salida_mochila_voraz.txt";
-            fos = new FileOutputStream(path,true);
-        }
+
+        fos = new FileOutputStream(path,true);
 
         String datos = "";
-
         datos += ("\n.................... ");
         datos += (new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new java.util.Date()));
         datos += (" ....................\n");
@@ -333,7 +416,11 @@ public class mochila_voraz {
         fos.close();
     }
 
-    static void esEntradaPorTecladoValida() throws IOException{
+    /**
+     * Verifica que la entrada por teclado es válida.
+     * @throws IOException cuando se da un error en la entrada de datos.
+     */
+    private static void esEntradaPorTecladoValida() throws IOException{
 
         Scanner entrada = new Scanner(System.in);
 
@@ -411,7 +498,13 @@ public class mochila_voraz {
         System.out.println("SYSTEM: fin de entrada por teclado.\n");
     }
 
-    static void decidirSiFinalizarEjecucion(Scanner entrada, Exception e) throws IOException {
+    /**
+     * Método encargado de gestionar los errores y la finalización de la entrada por teclado.
+     * @param entrada instancia de la clase Scanner que se está utilizando para obtener la entrada.
+     * @param e la excepción a gestionar.
+     * @throws IOException cuando se decide interrumpir la entrada por teclado.
+     */
+    private static void decidirSiFinalizarEjecucion(Scanner entrada, Exception e) throws IOException {
         entrada.nextLine();
         System.out.println((e.getMessage() == null || e.getMessage().contains("null"))?"ERROR: no ha introducido un número. Para introducir un decimal use el punto.":e.getMessage()+"\n");
         System.out.println("SYSTEM: si desea finalizar el programa escriba SI.");
@@ -423,19 +516,53 @@ public class mochila_voraz {
         entrada.nextLine();
     }
 
+    /**
+     * Método encargado de mostrar trazas si estas han sido activadas previamente.
+     * @param traza
+     */
     static void trazar(String traza){
         if(trazasActivas) System.out.println("TRAZA: "+traza+".");
     }
 
 }
 
+/**
+ * Clase creada exprofeso para ser el soporte de los datos de entrada.
+ * @author Asier Rodríguez López
+ * @version 1.0
+ * @since 1.0
+ */
 class Mochila {
-
+    /**
+     * Cantidad de objetos existentes.
+     */
     private final int cantidadObjetos;
+
+    /**
+     * Soporte de los datos de los objetos.
+     */
     private final PesoBeneficio[] pesosBeneficios;
+
+    /**
+     * Capacidad de la mochila.
+     */
     private final float capacidad;
+
+    /**
+     * Beneficio obtenido después de aplicar el algoritmo de selección de objetos.
+     */
     private float beneficioObtenido = 0f;
 
+    /**
+     * Constructor encargado de informar las variables con los datos obtenidos en la entrada.
+     * @see Mochila.PesoBeneficio
+     * @param cantidad_de_objetos cantidad de objetos disponibles.
+     * @param pesos_de_objetos pesos de cada objeto, donde el objeto de peso pesos_de_objetos[i] tiene el beneficio
+     *                         beneficios_de_objetos[i].
+     * @param beneficios_de_objetos beneficio de cada objeto, donde el objeto de beneficio beneficios_de_objetos[i]
+     *                              tiene el pesos_de_objetos[i].
+     * @param capacidad_de_mochila capacidad de la mochila.
+     */
     public Mochila(int cantidad_de_objetos, float[] pesos_de_objetos, float[] beneficios_de_objetos, float capacidad_de_mochila) {
         this.cantidadObjetos = cantidad_de_objetos;
         this.capacidad       = capacidad_de_mochila;
@@ -444,18 +571,25 @@ class Mochila {
 
         for(int i=0; i<pesos_de_objetos.length; i++)
             this.pesosBeneficios[i] = new PesoBeneficio(pesos_de_objetos[i], beneficios_de_objetos[i]);
-
     }
 
+    /**
+     * Algoritmo voraz que selecciona los objetos y su fracción a partir de los datos de la mochila, obteniendo el
+     * máximo beneficio por unidad de peso.
+     * @see Mochila.ResultadoMochila
+     * @see Monticulo#heapShort
+     * @param mochila mochila con los datos entre los que se hará la selección.
+     * @return resultado final del algoritmo.
+     */
     public ResultadoMochila[] mochilaObjetosFraccionables(Mochila mochila){
 
             mochila_voraz.trazar("inicio del algoritmo");
 
             PesoBeneficio[] mchPB = mochila.getPesosBeneficios();
             PesoBeneficio pb;
-            int contador    = 0;
-            float peso      = 0;
-            float capacidad = mochila.getCapacidad();
+            int contador         = 0;
+            float peso           = 0;
+            float capacidad      = mochila.getCapacidad();
             float beneficioTotal = 0;
 
             ResultadoMochila[] res = new ResultadoMochila[this.cantidadObjetos];
@@ -501,17 +635,45 @@ class Mochila {
             return res;
     }
 
+    /**
+     * Clase creada exprofeso para ser el soporte del resultado de la selección de un objeto por el algoritmo aplicado
+     * a la mochila.
+     * @author Asier Rodríguez López
+     * @version 1.0
+     * @since 1.0
+     */
     class ResultadoMochila{
+        /**
+         * Objeto seleccionado por el algoritmo.
+         */
         float peso;
+
+        /**
+         * Fracción del objeto seleccionado.
+         */
         float fraccion;
+
+        /**
+         * Beneficio resultante de la fracción del objeto seleccionado.
+         */
         float beneficio;
 
+        /**
+         * Constructor encargado de asignar los valores al resultado asociado a un objeto.
+         * @param peso Objeto seleccionado. Los objetos se identifican por su peso.
+         * @param fraccion la fracción del objeto que se almacena en la mochila.
+         * @param beneficio el beneficio obtenido en función de la fracción del objeto.
+         */
         public ResultadoMochila(float peso, float fraccion, float beneficio){
             this.peso      = peso;
             this.fraccion  = fraccion;
             this.beneficio = beneficio;
         }
 
+        /**
+         * Método que devuelve un literal con el peso, la fracción y el beneficio, del resultado, concatenados.
+         * @return literal con el peso, la fracción y el beneficio separados por un espacio.
+         */
         @Override
         public String toString(){
             return this.peso+" "+this.fraccion+" "+this.beneficio;
@@ -519,9 +681,26 @@ class Mochila {
 
     }
 
+    /**
+     * Clase utilizada como soporte de los datos y atributos de los objetos disponibles para introducir en la mochila.
+     * @author Asier Rodríguez López
+     * @version 1.0
+     * @since 1.0
+     */
     class PesoBeneficio implements Comparable<PesoBeneficio>{
+        /**
+         * Peso del objeto.
+         */
         float peso;
+
+        /**
+         * Beneficio del objeto.
+         */
         float beneficio;
+
+        /**
+         * Beneficio por unidad de peso.
+         */
         float ratio;
 
         public PesoBeneficio(float peso, float beneficio){
@@ -530,31 +709,57 @@ class Mochila {
             this.ratio     = beneficio/peso;
         }
 
+        /**
+         * Método encargado de comparar dos objetos distintos.
+         * @param pb objeto a comparar.
+         * @return número entero positivo si el objeto es mayor al comparado, cero si son iguales y negativo si es
+         * menor.
+         */
         @Override
         public int compareTo(PesoBeneficio pb) {
             float ratio = pb.beneficio/pb.peso;
-
             return Float.compare(this.ratio, ratio);
         }
 
+        /**
+         * Método que devuelve un literal con el peso y el beneficio, del objeto, concatenados.
+         * @return literal con el peso y el beneficio separados por un espacio.
+         */
         @Override
         public String toString(){
             return this.peso+" "+this.beneficio;
         }
     }
 
+    /**
+     * Devuelve todos los objetos introducidos.
+     * @see Mochila.PesoBeneficio
+     * @return objetos introducidos.
+     */
     public PesoBeneficio[] getPesosBeneficios(){
         return this.pesosBeneficios;
     }
 
+    /**
+     * Devuelve la capacidad de la mochila.
+     * @return capacidad de la mochila.
+     */
     public float getCapacidad(){
         return this.capacidad;
     }
 
+    /**
+     * Devuelve la cantidad de objetos disponibles.
+     * @return cantidad de objetos disponibles.
+     */
     public int getCantidadObjetos(){
         return this.cantidadObjetos;
     }
 
+    /**
+     * Devuelve el beneficio obtenido después de aplicar el algoritmo de selección.
+     * @return beneficio obtenido.
+     */
     public float getBeneficioObtenido(){
         return this.beneficioObtenido;
     }
