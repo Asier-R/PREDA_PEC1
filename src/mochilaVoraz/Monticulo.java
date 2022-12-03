@@ -32,7 +32,7 @@ public class Monticulo <T extends Comparable<T>>{
      * El tamaño máximo no puede ser menor al del array de entrada.
      * @param clase instancia de la clase Comparable que se va a utilizar para crear el montículo.
      * @param vector vector sobre el cual se va a crear el montículo.
-     * @throws IllegalArgumentException si el vector de entrada tiene un tamaño < 0.
+     * @throws IllegalArgumentException si el vector de entrada tiene un tamaño menor a cero.
      */
     public Monticulo (T clase, T[] vector){
         if(vector.length < 1 ) throw new IllegalArgumentException("ERROR: el tamaño del montículo no puede ser menor a 1.");
@@ -69,7 +69,7 @@ public class Monticulo <T extends Comparable<T>>{
      * posición del array. Para simplificar el cálculo de la complejidad, y al tener un tamaño n, se asumirá que el
      * coste es de la creación del montículo es lienal.
      * @param tamano tamaño del montículo a crear. Si no se indica tamaño, se creará de tamaño 1.
-     * @throws IllegalArgumentException si el vector de entrada tiene un tamaño < 0.
+     * @throws IllegalArgumentException si el vector de entrada tiene un tamaño menor a cero.
      * @return una nueva instancia de un montículo de tamaño n.
      */
     @SuppressWarnings("unchecked")
@@ -216,7 +216,7 @@ public class Monticulo <T extends Comparable<T>>{
      * Recibe un vector y lo ordenada de mayor a menor.
      * Complejidad temporal O(n*log(n)).
      * @param vector vector sobre el que se realizará la acción heapShort.
-     * @throws IllegalArgumentException si el vector de entrada es de tamaño < 1.
+     * @throws IllegalArgumentException si el vector de entrada es de tamaño menor a uno.
      */
     public void heapShort(T[] vector){
         if(vector.length < 1 ) throw new IllegalArgumentException("ERROR: el tamaño del vector no puede ser menor a 1.");
