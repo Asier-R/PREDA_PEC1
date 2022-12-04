@@ -356,7 +356,7 @@ public class mochila_voraz {
         if(arrayDatos.length-2 == Integer.parseInt(arrayDatos[0]))
             trazar("SYSTEM: el número de objetos es coherente con lo indicado.");
         else
-            throw new FileSystemException("ERROR: el número de objetos no cuadra con lo indicado => num:"+arrayDatos[0]+" <> cap:"+(arrayDatos.length-2));
+            throw new FileSystemException("ERROR: el número de objetos no cuadra con lo indicado => indicado:"+arrayDatos[0]+" <> recuento:"+(arrayDatos.length-2));
 
         //Datos mochila
         int cantidadObjetos    = arrayDatos.length-2;
