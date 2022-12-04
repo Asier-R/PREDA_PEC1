@@ -44,8 +44,9 @@ public class MainPruebas {
         try {
             String fichero = "C:\\Users\\Monst\\Desktop\\UNED\\Asignaturas\\2022-2023\\Programacion y Estructuras de Datos Avanzadas\\PRACTICA 1\\PREDA_PEC1\\FICHEROS\\ficheroPruebas.txt";
             String ficheroSal = "C:\\Users\\Monst\\Desktop\\UNED\\Asignaturas\\2022-2023\\Programacion y Estructuras de Datos Avanzadas\\PRACTICA 1\\PREDA_PEC1\\FICHEROS\\salidaPrueba.txt";
+            String ficheroSal2 = "C:\\Users\\Monst\\Desktop\\UNED\\Asignaturas\\2022-2023\\Programacion y Estructuras de Datos Avanzadas\\PRACTICA 1\\PREDA_PEC1\\FICHEROS\\basura.txt";
             //mochila_voraz.main(new String[] {"-t","-h",fichero,ficheroSal});
-            mochila_voraz.main(new String[] {fichero,ficheroSal});
+            mochila_voraz.main(new String[] {fichero,ficheroSal2});
             //mochila_voraz.main(new String[] {"-h",fichero});
         }catch(Exception e){
             System.out.println(e.getMessage());

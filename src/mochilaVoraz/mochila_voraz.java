@@ -544,7 +544,8 @@ public class mochila_voraz {
      * @param traza mensaje de texto a trazar.
      */
     static void trazar(String traza){
-        if(trazasActivas) System.out.println(traza);
+        if(traza.startsWith("ERROR:")) System.out.println(traza);
+        else if(trazasActivas) System.out.println(traza);
     }
 
 }
