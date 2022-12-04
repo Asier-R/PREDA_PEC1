@@ -97,9 +97,9 @@ public class mochila_voraz {
                 if(res.peso != 0) salida.append(res).append("\n");
 
             salida.append(mochila.getBeneficioObtenido());
-            escribirFichero(salida.toString());
 
             if(!existeFicheroSalida) System.out.println("\nSYSTEM: resultado\n"+salida);
+            else escribirFichero(salida.toString());
 
         } catch (Exception iae) {
             gestionarMensajeError(iae);
