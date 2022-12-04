@@ -318,7 +318,7 @@ public class mochila_voraz {
         trazar("SYSTEM: inicio de la validación de los datos.");
 
         //Estructura del fichero
-        Pattern pattern = Pattern.compile("^([0-9]+)\\s+((([0-9]+(\\.[0-9]+)?) ([0-9]+(?:\\.[0-9]+)?))\\s+)+([0-9]+(\\.[0-9]+)?)$", Pattern.MULTILINE);
+        Pattern pattern = Pattern.compile("^[0-9]+\\s+(?:.+)[0-9]+(?:\\.[0-9]+)?$", Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(datos);
 
         if(matcher.find())
