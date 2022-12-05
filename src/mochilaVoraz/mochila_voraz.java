@@ -75,9 +75,9 @@ public class mochila_voraz {
             }
 
             if (!existeFicheroEntrada)
-                trazar("SYSTEM: No se ha especificado fichero de entrada...se solicitarán los datos por entrada de teclado.");
+                trazar("SYSTEM: No se ha especificado fichero de entrada...se solicitarán los datos por entrada de teclado.",false);
             if (!existeFicheroSalida)
-                trazar("SYSTEM: No se ha especificado fichero de salida...se creará un fichero con nombre salida_mochila_voraz.txt.");
+                trazar("SYSTEM: No se ha especificado fichero de salida...el resultado se mostrará por la consola.",false);
 
             //Validaciones de datos de mochila
             if (existeFicheroEntrada) {
@@ -113,7 +113,7 @@ public class mochila_voraz {
      * @param <Excep> clase de tipo excepción a gestionar.
      */
     private static <Excep extends Exception> void gestionarMensajeError(Excep e){
-        trazar(e.getMessage().startsWith("ERROR: ")?e.getMessage()+"\n":"ERROR: error inesperado => "+e.getMessage()+"\n");
+        trazar(e.getMessage().startsWith("ERROR: ")?e.getMessage()+"\n":"ERROR: error inesperado => "+e.getMessage()+"\n",true);
     }
 
     /**
@@ -201,7 +201,7 @@ public class mochila_voraz {
      * Muestra el mensaje de trazas activadas.
      */
     private static void trazasActivadas(){
-        trazar("SYSTEM: se han activado las trazas.");
+        trazar("SYSTEM: se han activado las trazas.",false);
         trazasActivas = true;
     }
 
@@ -272,26 +272,26 @@ public class mochila_voraz {
      * @return true si el fichero es válido.
      */
     private static boolean validarFichero(String nombre_fichero, Boolean esEntrada){
-        trazar("SYSTEM: se comprueba fichero "+(esEntrada?"de entrada":"de salida")+" "+nombre_fichero+".");
+        trazar("SYSTEM: se comprueba fichero "+(esEntrada?"de entrada":"de salida")+" "+nombre_fichero+".",false);
         File fichero = new File(nombre_fichero);
         //¿Existe fichero?
         if(!fichero.exists()) {
-            trazar("ERROR: el fichero no existe.");
+            trazar("ERROR: el fichero no existe.",true);
             return false;
         }
         //¿Es fichero válido?
         if(!fichero.isFile()) {
-            trazar("ERROR: no es un fichero válido.");
+            trazar("ERROR: no es un fichero válido.",true);
             return false;
         }
         //¿Se puede leer?
         if(esEntrada && !fichero.canRead()) {
-            trazar("ERROR: el fichero no se puede leer.");
+            trazar("ERROR: el fichero no se puede leer.",true);
             return false;
         }
         //¿Se puede escribir?
         if(!esEntrada && !fichero.canWrite()) {
-            trazar("ERROR: no se puede escribir en el fichero.");
+            trazar("ERROR: no se puede escribir en el fichero.",true);
             return false;
         }
         if(esEntrada) {
@@ -304,7 +304,7 @@ public class mochila_voraz {
             ficheroSalida = nombre_fichero;
         }
         //Fichero válido
-        trazar("SYSTEM: el fichero "+(esEntrada?"de entrada":"de salida")+" se puede procesar.\n");
+        trazar("SYSTEM: el fichero "+(esEntrada?"de entrada":"de salida")+" se puede procesar.\n",false);
         return true;
     }
 
@@ -315,14 +315,14 @@ public class mochila_voraz {
      * @throws FileSystemException cuando los datos no tienen el formato correcto.
      */
     private static void sonValidosDatosFichero(String datos) throws FileSystemException {
-        trazar("SYSTEM: inicio de la validación de los datos.");
+        trazar("SYSTEM: inicio de la validación de los datos.",false);
 
         //Estructura del fichero
         Pattern pattern = Pattern.compile("^[0-9]+\\s+(?:.+)[0-9]+(?:\\.[0-9]+)?$", Pattern.MULTILINE);
         Matcher matcher = pattern.matcher(datos);
 
         if(matcher.find())
-            trazar("SYSTEM: el fichero está correctamente estructurado.");
+            trazar("SYSTEM: el fichero está correctamente estructurado.",false);
         else
             throw new FileSystemException("""
                     ERROR: el fichero no está correctamente estructurado.
@@ -339,7 +339,7 @@ public class mochila_voraz {
         matcher = pattern.matcher(arrayDatos[0]);
 
         if(matcher.find())
-            trazar("SYSTEM: el número de objetos es "+arrayDatos[0]+".");
+            trazar("SYSTEM: el número de objetos es "+arrayDatos[0]+".",false);
         else
             throw new FileSystemException("ERROR: no se ha introducido correctamente el número de objetos => "+arrayDatos[0]);
 
@@ -348,13 +348,13 @@ public class mochila_voraz {
         matcher = pattern.matcher(arrayDatos[arrayDatos.length-1]);
 
         if(matcher.find())
-            trazar("SYSTEM: la capacidad de la mochila es "+arrayDatos[arrayDatos.length-1]+".");
+            trazar("SYSTEM: la capacidad de la mochila es "+arrayDatos[arrayDatos.length-1]+".",false);
         else
             throw new FileSystemException("ERROR: no se ha introducido correctamente la capacidad de la mochila => "+arrayDatos[arrayDatos.length-1]);
 
         //El número de objetos coincide con lo indicado en la primera línea
         if(arrayDatos.length-2 == Integer.parseInt(arrayDatos[0]))
-            trazar("SYSTEM: el número de objetos es coherente con lo indicado.");
+            trazar("SYSTEM: el número de objetos es coherente con lo indicado.",false);
         else
             throw new FileSystemException("ERROR: el número de objetos no cuadra con lo indicado => indicado:"+arrayDatos[0]+" <> recuento:"+(arrayDatos.length-2));
 
@@ -382,7 +382,7 @@ public class mochila_voraz {
         //Inicializar mochila
         mochila = new Mochila(cantidadObjetos, pesos, beneficios, capacidadMochila);
 
-        trazar("SYSTEM: datos correctos. Fin de validación de los datos.\n");
+        trazar("SYSTEM: datos correctos. Fin de validación de los datos.\n",false);
     }
 
     /**
@@ -401,7 +401,7 @@ public class mochila_voraz {
         while(lector.hasNext())
             datos.append(lector.nextLine()).append("\n");
 
-        trazar("SYSTEM: lectura de fichero de entrada => \n"+datos+"\n");
+        trazar("SYSTEM: lectura de fichero de entrada => \n"+datos+"\n",false);
 
         return datos.toString();
     }
@@ -447,7 +447,7 @@ public class mochila_voraz {
 
         Scanner entrada = new Scanner(System.in);
 
-        trazar("\nSYSTEM: inicio entrada por teclado...");
+        trazar("\nSYSTEM: inicio entrada por teclado...",false);
 
         boolean entradaErronea = true;
         int cantidad    = 0;
@@ -458,11 +458,11 @@ public class mochila_voraz {
         //Cantidad de tipo de objetos
         while(entradaErronea) {
             try {
-                trazar("SYSTEM: introduzca la cantidad de objetos.");
+                trazar("SYSTEM: introduzca la cantidad de objetos.",false);
                 cantidad = entrada.nextInt();
                 if(cantidad <= 0) throw new Exception("ERROR: no ha introducido un número entero mayor a cero.");
                 entradaErronea = false;
-                trazar("SYSTEM: cantidad de objetos => "+cantidad);
+                trazar("SYSTEM: cantidad de objetos => "+cantidad,false);
                 entrada.nextLine();
             } catch (Exception e) {
                 decidirSiFinalizarEjecucion(entrada, e);
@@ -477,15 +477,15 @@ public class mochila_voraz {
         //Objetos posibles
         while(i < cantidad){
             try {
-                trazar(("SYSTEM: introduzca el peso del objeto ("+(i+1)+"/"+cantidad+")"));
+                trazar(("SYSTEM: introduzca el peso del objeto ("+(i+1)+"/"+cantidad+")"),false);
                 float peso = entrada.nextFloat();
                 if(peso <= 0) throw new Exception("ERROR: peso menor o igual a cero.");
                 pesos[i] = peso;
-                trazar(("SYSTEM: introduzca el beneficio del objeto ("+(i+1)+"/"+cantidad+")"));
+                trazar(("SYSTEM: introduzca el beneficio del objeto ("+(i+1)+"/"+cantidad+")"),false);
                 float beneficio = entrada.nextFloat();
                 if(beneficio < 0) throw new Exception("ERROR: beneficio menor a cero.");
                 beneficios[i] = beneficio;
-                trazar("SYSTEM: se ha introducido un objeto con peso "+peso+" y beneficio "+beneficio+" ("+(i+1)+"/"+cantidad+")");
+                trazar("SYSTEM: se ha introducido un objeto con peso "+peso+" y beneficio "+beneficio+" ("+(i+1)+"/"+cantidad+")",false);
                 i++;
                 entrada.nextLine();
             } catch (Exception e) {
@@ -498,12 +498,12 @@ public class mochila_voraz {
         //Capacidad mochila
         while(entradaErronea){
             try {
-                trazar("SYSTEM: introduce la capacidad de la mochila.");
+                trazar("SYSTEM: introduce la capacidad de la mochila.",false);
                 float cap = entrada.nextFloat();
                 if(cap <= 0) throw new Exception("ERROR: no ha introducido un número entero mayor a cero.");
                 capacidad= cap;
                 entradaErronea = false;
-                trazar("SYSTEM: la capacidad de la mochila es => "+capacidad);
+                trazar("SYSTEM: la capacidad de la mochila es => "+capacidad,false);
             } catch (Exception e) {
                 decidirSiFinalizarEjecucion(entrada, e);
             }
@@ -512,13 +512,13 @@ public class mochila_voraz {
         //Inicializamos la mochila
         mochila = new Mochila(cantidad, pesos, beneficios, capacidad);
 
-        trazar("SYSTEM: los datos de la mochila son => ");
-        trazar("objetos: "+mochila.getCantidadObjetos());
+        trazar("SYSTEM: los datos de la mochila son => ",false);
+        trazar("objetos: "+mochila.getCantidadObjetos(),false);
         for (int e=0; e<mochila.getCantidadObjetos(); e++)
-            trazar("peso: "+mochila.getPesosBeneficios()[e].peso+" beneficio: "+mochila.getPesosBeneficios()[e].beneficio);
-        trazar("capacidad: "+mochila.getCapacidad());
+            trazar("peso: "+mochila.getPesosBeneficios()[e].peso+" beneficio: "+mochila.getPesosBeneficios()[e].beneficio,false);
+        trazar("capacidad: "+mochila.getCapacidad(),false);
 
-        trazar("SYSTEM: fin de entrada por teclado.\n");
+        trazar("SYSTEM: fin de entrada por teclado.\n",false);
     }
 
     /**
@@ -529,8 +529,8 @@ public class mochila_voraz {
      */
     private static void decidirSiFinalizarEjecucion(Scanner entrada, Exception e) throws IOException {
         entrada.nextLine();
-        trazar((e.getMessage() == null || e.getMessage().contains("null"))?"ERROR: no ha introducido un número. Para introducir un decimal use el punto.":e.getMessage()+"\n");
-        trazar("SYSTEM: si desea finalizar el programa escriba SI.");
+        trazar((e.getMessage() == null || e.getMessage().contains("null"))?"ERROR: no ha introducido un número. Para introducir un decimal use el punto.":e.getMessage()+"\n",true);
+        trazar("SYSTEM: si desea finalizar el programa escriba SI.",false);
         String opcion = entrada.nextLine();
         if(opcion.equalsIgnoreCase("SI")){
             entrada.close();
@@ -543,9 +543,8 @@ public class mochila_voraz {
      * Método encargado de mostrar trazas si estas han sido activadas previamente.
      * @param traza mensaje de texto a trazar.
      */
-    static void trazar(String traza){
-        if(traza.startsWith("ERROR:")) System.out.println(traza);
-        else if(trazasActivas) System.out.println(traza);
+    static void trazar(String traza, Boolean esError){
+        if(trazasActivas || esError) System.out.println(traza);
     }
 
 }
@@ -612,7 +611,7 @@ class Mochila {
      */
     public ResultadoMochila[] mochilaObjetosFraccionables(Mochila mochila){
 
-            mochila_voraz.trazar("SYSTEM: inicio del algoritmo.");
+            mochila_voraz.trazar("SYSTEM: inicio del algoritmo.",false);
 
             PesoBeneficio[] mchPB = mochila.getPesosBeneficios();
             PesoBeneficio pb;
@@ -624,38 +623,38 @@ class Mochila {
             ResultadoMochila[] res = new ResultadoMochila[this.cantidadObjetos];
 
             // Se inicia montículo con una referencia al tipo de datos.
-            mochila_voraz.trazar("SYSTEM: se inicia montículo.");
+            mochila_voraz.trazar("SYSTEM: se inicia montículo.",false);
             Monticulo<Mochila.PesoBeneficio> mont = new Monticulo<>(mchPB[0]);
 
             // Se ordenan los objetos en orden decreciente
-            mochila_voraz.trazar("SYSTEM: se ordenan los objetos introducidos por "+(mochila_voraz.existeFicheroSalida?"fichero.":"teclado."));
+            mochila_voraz.trazar("SYSTEM: se ordenan los objetos introducidos por "+(mochila_voraz.existeFicheroSalida?"fichero.":"teclado."),false);
             mont.heapShort(mchPB);
 
             // Se inicia a ceros el resultado
-            mochila_voraz.trazar("SYSTEM: se inicia a ceros el resultado.");
+            mochila_voraz.trazar("SYSTEM: se inicia a ceros el resultado.",false);
             for(int i=0; i<res.length; i++)
                 res[i] = new ResultadoMochila(0,0,0);
 
             // Bucle principal
-            mochila_voraz.trazar("SYSTEM: inicio de bucle principal.");
+            mochila_voraz.trazar("SYSTEM: inicio de bucle principal.",false);
             while(peso < capacidad){
                 pb = mont.obtenerCima(mchPB);
-                mochila_voraz.trazar("SYSTEM: iteración "+contador+" -> se obtiene de la cima del montículo el objeto de peso => "+pb.peso);
+                mochila_voraz.trazar("SYSTEM: iteración "+contador+" -> se obtiene de la cima del montículo el objeto de peso => "+pb.peso,false);
                 if( (peso + pb.peso) < capacidad ){
-                    mochila_voraz.trazar("SYSTEM: máximo de capacidad no alcanzado, objeto no fraccionado.");
+                    mochila_voraz.trazar("SYSTEM: máximo de capacidad no alcanzado, objeto no fraccionado.",false);
                     res[contador] = new ResultadoMochila(pb.peso, 1, pb.beneficio);
                     peso += pb.peso;
                     beneficioTotal += pb.beneficio;
                 }
                 else{
-                    mochila_voraz.trazar("SYSTEM: máximo de capacidad alcanzado, objeto fraccionado.");
+                    mochila_voraz.trazar("SYSTEM: máximo de capacidad alcanzado, objeto fraccionado.",false);
                     res[contador] = new ResultadoMochila(pb.peso, ((capacidad-peso)/pb.peso), (((capacidad-peso)/pb.peso))*pb.beneficio);
                     peso = capacidad;
                     beneficioTotal += res[contador].beneficio;
                 }
 
-                mochila_voraz.trazar("SYSTEM: se incorpora a la solución el objeto => peso:"+res[contador].peso+"  fracción:"+res[contador].fraccion+"  beneficio:"+res[contador].beneficio);
-                mochila_voraz.trazar("SYSTEM: peso actualizado a => "+peso+"    beneficio total => "+beneficioTotal);
+                mochila_voraz.trazar("SYSTEM: se incorpora a la solución el objeto => peso:"+res[contador].peso+"  fracción:"+res[contador].fraccion+"  beneficio:"+res[contador].beneficio,false);
+                mochila_voraz.trazar("SYSTEM: peso actualizado a => "+peso+"    beneficio total => "+beneficioTotal,false);
 
                 contador++;
             }
