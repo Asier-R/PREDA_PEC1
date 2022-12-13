@@ -447,7 +447,7 @@ public class mochila_voraz {
 
         Scanner entrada = new Scanner(System.in);
 
-        trazar("\nSYSTEM: inicio entrada por teclado...",false);
+        System.out.println("\nSYSTEM: inicio entrada por teclado...");
 
         boolean entradaErronea = true;
         int cantidad    = 0;
@@ -458,11 +458,11 @@ public class mochila_voraz {
         //Cantidad de tipo de objetos
         while(entradaErronea) {
             try {
-                trazar("SYSTEM: introduzca la cantidad de objetos.",false);
+                System.out.println("SYSTEM: introduzca la cantidad de objetos.");
                 cantidad = entrada.nextInt();
                 if(cantidad <= 0) throw new Exception("ERROR: no ha introducido un número entero mayor a cero.");
                 entradaErronea = false;
-                trazar("SYSTEM: cantidad de objetos => "+cantidad,false);
+                System.out.println("SYSTEM: cantidad de objetos => "+cantidad);
                 entrada.nextLine();
             } catch (Exception e) {
                 decidirSiFinalizarEjecucion(entrada, e);
@@ -477,15 +477,15 @@ public class mochila_voraz {
         //Objetos posibles
         while(i < cantidad){
             try {
-                trazar(("SYSTEM: introduzca el peso del objeto ("+(i+1)+"/"+cantidad+")"),false);
+                System.out.println(("SYSTEM: introduzca el peso del objeto ("+(i+1)+"/"+cantidad+")"));
                 float peso = entrada.nextFloat();
                 if(peso <= 0) throw new Exception("ERROR: peso menor o igual a cero.");
                 pesos[i] = peso;
-                trazar(("SYSTEM: introduzca el beneficio del objeto ("+(i+1)+"/"+cantidad+")"),false);
+                System.out.println(("SYSTEM: introduzca el beneficio del objeto ("+(i+1)+"/"+cantidad+")"));
                 float beneficio = entrada.nextFloat();
                 if(beneficio < 0) throw new Exception("ERROR: beneficio menor a cero.");
                 beneficios[i] = beneficio;
-                trazar("SYSTEM: se ha introducido un objeto con peso "+peso+" y beneficio "+beneficio+" ("+(i+1)+"/"+cantidad+")",false);
+                System.out.println("SYSTEM: se ha introducido un objeto con peso "+peso+" y beneficio "+beneficio+" ("+(i+1)+"/"+cantidad+")");
                 i++;
                 entrada.nextLine();
             } catch (Exception e) {
@@ -498,12 +498,12 @@ public class mochila_voraz {
         //Capacidad mochila
         while(entradaErronea){
             try {
-                trazar("SYSTEM: introduce la capacidad de la mochila.",false);
+                System.out.println("SYSTEM: introduce la capacidad de la mochila.");
                 float cap = entrada.nextFloat();
                 if(cap <= 0) throw new Exception("ERROR: no ha introducido un número entero mayor a cero.");
                 capacidad= cap;
                 entradaErronea = false;
-                trazar("SYSTEM: la capacidad de la mochila es => "+capacidad,false);
+                System.out.println("SYSTEM: la capacidad de la mochila es => "+capacidad);
             } catch (Exception e) {
                 decidirSiFinalizarEjecucion(entrada, e);
             }
@@ -529,8 +529,8 @@ public class mochila_voraz {
      */
     private static void decidirSiFinalizarEjecucion(Scanner entrada, Exception e) throws IOException {
         entrada.nextLine();
-        trazar((e.getMessage() == null || e.getMessage().contains("null"))?"ERROR: no ha introducido un número. Para introducir un decimal use el punto.":e.getMessage()+"\n",true);
-        trazar("SYSTEM: si desea finalizar el programa escriba SI.",false);
+        System.out.println((e.getMessage() == null || e.getMessage().contains("null"))?"ERROR: no ha introducido un número. Para introducir un decimal use el punto.":e.getMessage()+"\n");
+        System.out.println("SYSTEM: si desea finalizar el programa escriba SI.");
         String opcion = entrada.nextLine();
         if(opcion.equalsIgnoreCase("SI")){
             entrada.close();
