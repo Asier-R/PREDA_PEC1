@@ -234,7 +234,7 @@ public class Monticulo <T extends Comparable<T>>{
      * @param vector vector sobre el que se realizará la acción heapShort.
      * @throws IllegalArgumentException si el vector de entrada es de tamaño menor a uno.
      */
-    public void heapShort(T[] vector){
+    public void heapSort(T[] vector){
         if(vector.length < 1 ) throw new IllegalArgumentException("ERROR: el tamaño del vector no puede ser menor a 1.");
         T cima;
         T[] clon = vector.clone(); // O(1)

@@ -605,7 +605,7 @@ class Mochila {
      * @see Mochila.ResultadoMochila
      * @see Mochila.PesoBeneficio
      * @see Monticulo
-     * @see Monticulo#heapShort
+     * @see Monticulo#heapSort
      * @param mochila mochila con los datos entre los que se hará la selección.
      * @return resultado final del algoritmo.
      */
@@ -628,7 +628,7 @@ class Mochila {
 
             // Se ordenan los objetos en orden decreciente
             mochila_voraz.trazar("SYSTEM: se ordenan los objetos introducidos por "+(mochila_voraz.existeFicheroSalida?"fichero.":"teclado."),false);
-            mont.heapShort(mchPB);
+            mont.heapSort(mchPB);
 
             // Se inicia a ceros el resultado
             mochila_voraz.trazar("SYSTEM: se inicia a ceros el resultado.",false);
