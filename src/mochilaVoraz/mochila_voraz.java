@@ -542,6 +542,7 @@ public class mochila_voraz {
     /**
      * Método encargado de mostrar trazas si estas han sido activadas previamente.
      * @param traza mensaje de texto a trazar.
+     * @param esError indica si es un mensaje de error.
      */
     static void trazar(String traza, Boolean esError){
         if(trazasActivas || esError) System.out.println(traza);
