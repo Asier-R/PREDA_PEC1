@@ -201,8 +201,8 @@ public class mochila_voraz {
      * Muestra el mensaje de trazas activadas.
      */
     private static void trazasActivadas(){
-        trazar("SYSTEM: se han activado las trazas.",false);
         trazasActivas = true;
+        trazar("SYSTEM: se han activado las trazas.",false);
     }
 
     /**
