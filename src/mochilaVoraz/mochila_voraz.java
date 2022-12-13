@@ -640,6 +640,7 @@ class Mochila {
             mochila_voraz.trazar("SYSTEM: inicio de bucle principal.",false);
             while(peso < capacidad){
                 pb = mont.obtenerCima(mchPB);
+                if(pb == null) break;
                 mochila_voraz.trazar("SYSTEM: iteración "+contador+" -> se obtiene de la cima del montículo el objeto de peso => "+pb.peso,false);
                 if( (peso + pb.peso) < capacidad ){
                     mochila_voraz.trazar("SYSTEM: máximo de capacidad no alcanzado, objeto no fraccionado.",false);
